@@ -144,6 +144,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $mlceAssignment->update([
+            "location_status" => AssigneeLocationTrackStatus::DMC->value,
             "status" => MlceAssignmentStatus::COMPLETED->value,
             "completed_at" => now()->format("Y-m-d H:i:s")
         ]);

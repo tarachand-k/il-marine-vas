@@ -14,14 +14,12 @@ class AssignmentPhotoController extends Controller
         "mlceAssignment",
     ];
 
-    protected ?string $resourceName = "assignment-photos";
-
     protected array $fileFieldNames = [
         "photo",
     ];
 
     protected array $fileFolderPaths = [
-        "photos"
+        "assignment-photos"
     ];
 
     public function index(): JsonResponse {
