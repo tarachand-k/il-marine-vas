@@ -18,7 +18,7 @@ return new class extends Migration {
 
             $table->string('indent_code', 50);
             $table->string('pdr_observation', 100)->nullable();
-            $table->string('job_scope', 100)->nullable();
+            $table->longText('job_scope')->nullable();
             $table->longText('why_mlce')->nullable();
 
             $table->timestamps();

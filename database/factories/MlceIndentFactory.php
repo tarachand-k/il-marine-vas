@@ -17,7 +17,7 @@ class MlceIndentFactory extends Factory
         return [
             'indent_code' => MlceIndent::generateIndentCode(),
             'pdr_observation' => $this->faker->word(),
-            'job_scope' => $this->faker->word(),
+            'job_scope' => $this->faker->paragraph(),
             'why_mlce' => $this->faker->paragraph(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),

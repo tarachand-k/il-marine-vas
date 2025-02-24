@@ -31,7 +31,7 @@ class MlceAssignmentController extends Controller
      */
     public function store(MlceAssignmentRequest $request): JsonResponse {
         if (MlceAssignment::where("mlce_indent_id", $request->validated("mlce_indent_id"))
-            ->where("mlce_indent_location_id", $request->validated("mlce_indent_location_id"))->doesntExist()) {
+            ->where("mlce_indent_location_id", $request->validated("mlce_indent_location_id"))->exists()) {
             return $this->respondError('Indent location has already been assigned', null, 400);
         }
 

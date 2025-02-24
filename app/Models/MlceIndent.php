@@ -25,8 +25,8 @@ class MlceIndent extends Model
         'customer_id',
         'mlce_type_id',
 
-        'why_mlce',
-        'indent_code'
+        'job_scope',
+        'why_mlce'
     ];
 
     protected static function boot(): void {

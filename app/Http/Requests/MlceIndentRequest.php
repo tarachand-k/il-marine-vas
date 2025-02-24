@@ -15,7 +15,7 @@ class MlceIndentRequest extends FormRequest
             'customer_id' => ['required', 'exists:customers,id'],
             'mlce_type_id' => ['required', 'exists:mlce_types,id'],
             'pdr_observation' => ['nullable', ...$this->validateFile("pdr_observation")],
-            'job_scope' => ['nullable', ...$this->validateFile("job_scope")],
+            'job_scope' => ['nullable', "string"],
             'why_mlce' => ['nullable', 'string'],
 
             'users' => ["nullable", 'array'],

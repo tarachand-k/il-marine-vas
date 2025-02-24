@@ -20,11 +20,11 @@ class MlceIndentController extends Controller
     protected ?string $resourceName = "mlce-indents";
 
     protected array $fileFieldNames = [
-        "pdr_observation", "job_scope",
+        "pdr_observation",
     ];
 
     protected array $fileFolderPaths = [
-        "pdr-observations", "job-scopes",
+        "pdr-observations",
     ];
 
     /**
