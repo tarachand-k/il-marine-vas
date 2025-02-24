@@ -19,7 +19,7 @@ class MlceAssignmentController extends Controller
 
     public function index(): JsonResponse {
         $mlceAssignments = $this->paginateOrGet(
-            MlceAssignment::with($this->getRelations())->latest());
+            MlceAssignment::with($this->getRelations())->filter()->latest());
 
         return $this->respondWithResourceCollection(
             MlceAssignmentResource::collection($mlceAssignments)

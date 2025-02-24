@@ -18,6 +18,8 @@ use App\Http\Controllers\Api\V1\MlceTypeController;
 use App\Http\Controllers\Api\V1\NavigationReportManualController;
 use App\Http\Controllers\Api\V1\ReportViewController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\VideoController;
+use App\Http\Controllers\Api\V1\VideoViewController;
 use App\Http\Controllers\Api\V1\WhyMlceController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,6 +53,8 @@ Route::prefix("v1")->group(function () {
             "assignment-photos" => AssignmentPhotoController::class,
             "mlce-reports" => MlceReportController::class,
             "mlce-reports.report-views" => ReportViewController::class,
+            "videos" => VideoController::class,
+            "videos.views" => VideoViewController::class,
         ], [
             // ⛔ do not delete or update this, else the updating will not work.
             'parameters' => [
