@@ -25,6 +25,10 @@ class MlceRecommendation extends Model
         'client_response',
         'status',
         'timeline',
+        "photo_1_desc",
+        "photo_2_desc",
+        "photo_3_desc",
+        "photo_4_desc",
     ];
 
     public function mlceAssignment(): BelongsTo {

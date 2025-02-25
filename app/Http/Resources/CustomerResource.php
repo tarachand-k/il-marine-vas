@@ -20,6 +20,7 @@ class CustomerResource extends JsonResource
             'policy_type' => $this->policy_type,
             'coverage_from' => $this->coverage_from,
             'coverage_to' => $this->coverage_to,
+            'address' => $this->address,
             'about' => $this->about,
             'coverage_terms' => $this->coverage_terms,
             'cargo_details' => $this->cargo_details,

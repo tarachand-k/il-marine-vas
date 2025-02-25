@@ -16,10 +16,11 @@ class CustomerRequest extends FormRequest
             'policy_type' => ['required', 'string'],
             'coverage_from' => ['required', 'date'],
             'coverage_to' => ['required', 'date'],
-            'about' => ['nullable'],
-            'coverage_terms' => ['nullable'],
-            'cargo_details' => ['nullable'],
-            'transit_details' => ['nullable'],
+            'address' => ['nullable', 'string'],
+            'about' => ['nullable', 'array'],
+            'coverage_terms' => ['nullable', 'array'],
+            'cargo_details' => ['nullable', 'array'],
+            'transit_details' => ['nullable', 'array'],
         ];
 
         if ($this->routeIs("customers.update")) {

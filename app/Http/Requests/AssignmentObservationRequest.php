@@ -19,6 +19,10 @@ class AssignmentObservationRequest extends FormRequest
             'photo_2' => $this->validateFile("photo_2"),
             'photo_3' => $this->validateFile("photo_3"),
             'photo_4' => $this->validateFile("photo_4"),
+            "photo_1_desc" => ["nullable", "string"],
+            "photo_2_desc" => ["nullable", "string"],
+            "photo_3_desc" => ["nullable", "string"],
+            "photo_4_desc" => ["nullable", "string"],
         ];
 
         if ($this->routeIs("mlce-assignments.observations.update")) {

@@ -31,6 +31,10 @@ class MlceRecommendationResource extends JsonResource
             'photo_2' => $this->photo_2,
             'photo_3' => $this->photo_3,
             'photo_4' => $this->photo_4,
+            'photo_1_desc' => $this->photo_1_desc,
+            'photo_2_desc' => $this->photo_2_desc,
+            'photo_3_desc' => $this->photo_3_desc,
+            'photo_4_desc' => $this->photo_4_desc,
 
             // relations
             'mlce_assignment' => new MlceAssignmentResource($this->whenLoaded('mlceAssignment')),

@@ -27,9 +27,19 @@ class Customer extends Model
         "policy_type",
         "coverage_from",
         "coverage_to",
+        "address",
         "about",
         "coverage_terms",
         "cargo_details",
         "transit_details",
     ];
+
+    protected function casts(): array {
+        return [
+            'about' => 'array',
+            'coverage_terms' => 'array',
+            'cargo_details' => 'array',
+            'transit_details' => 'array',
+        ];
+    }
 }

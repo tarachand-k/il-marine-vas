@@ -35,6 +35,10 @@ return new class extends Migration {
             $table->string("photo_2", 100)->nullable();
             $table->string("photo_3", 100)->nullable();
             $table->string("photo_4", 100)->nullable();
+            $table->text("photo_1_desc")->nullable();
+            $table->text("photo_2_desc")->nullable();
+            $table->text("photo_3_desc")->nullable();
+            $table->text("photo_4_desc")->nullable();
 
             $table->timestamps();
         });

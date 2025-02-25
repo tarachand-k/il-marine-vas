@@ -16,10 +16,11 @@ return new class extends Migration {
             $table->string('policy_type');
             $table->date('coverage_from');
             $table->date('coverage_to');
-            $table->mediumText('about')->nullable();
-            $table->mediumText('coverage_terms')->nullable();
-            $table->mediumText('cargo_details')->nullable();
-            $table->mediumText('transit_details')->nullable();
+            $table->text('address')->nullable();
+            $table->longText('about')->nullable();
+            $table->longText('coverage_terms')->nullable();
+            $table->longText('cargo_details')->nullable();
+            $table->longText('transit_details')->nullable();
 
             $table->timestamps();
         });
