@@ -52,7 +52,7 @@ Route::prefix("v1")->group(function () {
             "mlce-recommendations" => MlceRecommendationController::class,
             "assignment-photos" => AssignmentPhotoController::class,
             "mlce-reports" => MlceReportController::class,
-            "mlce-reports.report-views" => ReportViewController::class,
+            "mlce-reports.views" => ReportViewController::class,
             "videos" => VideoController::class,
             "videos.views" => VideoViewController::class,
         ], [

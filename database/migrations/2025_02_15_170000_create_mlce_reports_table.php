@@ -11,18 +11,17 @@ return new class extends Migration {
             $table->id();
 
             $table->foreignId('mlce_indent_id')->constrained("mlce_indents")->cascadeOnDelete();
-            $table->foreignId('mlce_assignment_id')->constrained("mlce_assignments")->cascadeOnDelete();
             $table->foreignId('customer_id')->constrained("customers")->cascadeOnDelete();
 
             $table->string("report_code", 50);
-            $table->longText('acknowledgment');
-            $table->longText('about_us');
-            $table->longText('marine_vas');
-            $table->longText('navigation_report_manual');
-            $table->longText('findings');
-            $table->longText('observation_closure_summery');
-            $table->longText('status_of_comment');
-            $table->longText('mlce_outcome');
+            $table->longText('acknowledgment')->nullable();
+            $table->longText('about_us')->nullable();
+            $table->longText('marine_vas')->nullable();
+            $table->longText('navigation_report_manual')->nullable();
+            $table->longText('findings')->nullable();
+            $table->longText('observation_closure_summery')->nullable();
+            $table->longText('status_of_comment')->nullable();
+            $table->longText('mlce_outcome')->nullable();
             $table->unsignedInteger('view_count')->default(0);
             $table->enum('status', array_column(MlceReportStatus::cases(), "value"))
                 ->default(MlceReportStatus::SUBMITTED->value);

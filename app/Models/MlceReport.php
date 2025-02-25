@@ -14,7 +14,6 @@ class MlceReport extends Model
 
     public $filterFields = [
         'mlce_indent_id',
-        'mlce_assignment_id',
         'customer_id',
 
         'report_code',
@@ -26,7 +25,6 @@ class MlceReport extends Model
 
     protected $fillable = [
         'mlce_indent_id',
-        'mlce_assignment_id',
         'customer_id',
 
         'report_code',
@@ -74,5 +72,18 @@ class MlceReport extends Model
 
     public function views(): HasMany {
         return $this->hasMany(ReportView::class, 'mlce_report_id');
+    }
+
+    protected function casts(): array {
+        return [
+            'acknowledgment' => 'array',
+            'about_us' => 'array',
+            'marine_vas' => 'array',
+            'navigation_report_manual' => 'array',
+            'findings' => 'array',
+            'observation_closure_summery' => 'array',
+            'status_of_comment' => 'array',
+            'mlce_outcome' => 'array',
+        ];
     }
 }

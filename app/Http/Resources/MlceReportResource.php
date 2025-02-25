@@ -14,7 +14,6 @@ class MlceReportResource extends JsonResource
             'id' => $this->id,
 
             'mlce_indent_id' => $this->mlce_indent_id,
-            'mlce_assignment_id' => $this->mlce_assignment_id,
             'customer_id' => $this->customer_id,
 
             'report_code' => $this->report_code,
@@ -33,7 +32,6 @@ class MlceReportResource extends JsonResource
 
             // relations
             'mlce_indent' => new MlceIndentResource($this->whenLoaded('mlceIndent')),
-            'mlce_assignment' => new MlceAssignmentResource($this->whenLoaded('mlceAssignment')),
             'customer' => new CustomerResource($this->whenLoaded('customer')),
             "views" => ReportViewResource::collection($this->whenLoaded("views")),
 

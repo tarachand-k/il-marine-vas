@@ -14,7 +14,7 @@ use Illuminate\Http\JsonResponse;
 class MlceIndentController extends Controller
 {
     protected array $relations = [
-        "createdBy", "customer", "mlceType", "users", "locations"
+        "createdBy", "customer", "mlceType", "users", "locations", "assignments", "report",
     ];
 
     protected ?string $resourceName = "mlce-indents";
@@ -55,6 +55,8 @@ class MlceIndentController extends Controller
             if ($request->has("locations")) {
                 $mlceIndent->locations()->createMany($request->validated("locations"));
             }
+
+            $mlceIndent->report()->create(["customer_id" => $mlceIndent->customer_id]);
 
             return $mlceIndent;
         });
@@ -107,7 +109,7 @@ class MlceIndentController extends Controller
      * Display the specified mlceIndent.
      */
     public function show(MlceIndent $mlceIndent): JsonResponse {
-        $mlceIndent->loadMissing($this->getRelations());
+        $mlceIndent->load($this->getRelations());
 
         return $this->respondWithResource(new MlceIndentResource($mlceIndent));
     }

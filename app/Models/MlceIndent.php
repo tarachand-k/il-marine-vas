@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class MlceIndent extends Model
 {
@@ -61,6 +62,15 @@ class MlceIndent extends Model
         return $this->belongsToMany(User::class)
             ->using(MlceIndentUser::class)
             ->withPivot(['id', 'type']);
+    }
+
+    public function assignments(): HasMany {
+        return $this->hasMany(MlceAssignment::class, 'mlce_indent_id')
+            ->with(["assignmentObservations", "assigneeLocationTracks", "mlceRecommendations"]);
+    }
+
+    public function report(): HasOne {
+        return $this->hasOne(MlceReport::class, 'mlce_indent_id');
     }
 
     public function locations(): HasMany {

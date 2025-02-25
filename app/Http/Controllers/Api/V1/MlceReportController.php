@@ -12,7 +12,7 @@ use Illuminate\Http\JsonResponse;
 class MlceReportController extends Controller
 {
     protected array $relations = [
-        "mlceIndent", "mlceAssignment", "customer", "views"
+        "mlceIndent", "customer", "views"
     ];
 
     public function index(): JsonResponse {

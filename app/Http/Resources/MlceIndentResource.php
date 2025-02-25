@@ -28,6 +28,8 @@ class MlceIndentResource extends JsonResource
             'mlce_type' => new MlceTypeResource($this->whenLoaded('mlceType')),
             'users' => UserResource::collection($this->whenLoaded("users")),
             "locations" => MlceIndentLocationResource::collection($this->whenLoaded("locations")),
+            "assignments" => MlceAssignmentResource::collection($this->whenLoaded("assignments")),
+            "report" => new MlceReportResource($this->whenLoaded("report")),
 
             // timestamps
             'created_at' => $this->created_at,

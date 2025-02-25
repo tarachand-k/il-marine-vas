@@ -25,6 +25,7 @@ class VideoViewController extends Controller
             "user_id" => auth()->id(),
             "viewed_at" => now()->format("Y-m-d H:i:s"),
         ]);
+        $video->increment("view_count");
 
         return new VideoViewResource(VideoView::create($request->validated()));
     }
