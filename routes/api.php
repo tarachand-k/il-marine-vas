@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\V1\MlceReportController;
 use App\Http\Controllers\Api\V1\MlceTypeController;
 use App\Http\Controllers\Api\V1\NavigationReportManualController;
 use App\Http\Controllers\Api\V1\ReportViewController;
+use App\Http\Controllers\Api\V1\SopController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\VideoController;
 use App\Http\Controllers\Api\V1\VideoViewController;
@@ -55,6 +56,7 @@ Route::prefix("v1")->group(function () {
             "mlce-reports.views" => ReportViewController::class,
             "videos" => VideoController::class,
             "videos.views" => VideoViewController::class,
+            "sops" => SopController::class,
         ], [
             // ⛔ do not delete or update this, else the updating will not work.
             'parameters' => [
