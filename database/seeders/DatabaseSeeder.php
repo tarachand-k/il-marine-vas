@@ -190,7 +190,30 @@ class DatabaseSeeder extends Seeder
             "customer_id" => $mlceIndent1->customer_id,
         ]);
 
-        $mlceReport1->views()->createMany([["user_id" => 7], ["user_id" => 8]]);
+        $mlceReport1->views()->createMany([
+            [
+                "user_id" => 7,
+                "ip_address" => fake()->ipv4(),
+                "device_info" => fake()->userAgent()
+            ],
+            [
+                "user_id" => 8,
+                "ip_address" => fake()->ipv4(),
+                "device_info" => fake()->userAgent()
+            ],
+            [
+                "user_id" => 7,
+                "page_name" => "Acknowledgment",
+                "ip_address" => fake()->ipv4(),
+                "device_info" => fake()->userAgent()
+            ],
+            [
+                "user_id" => 8,
+                "page_name" => "Acknowledgment",
+                "ip_address" => fake()->ipv4(),
+                "device_info" => fake()->userAgent()
+            ],
+        ]);
 
         $mlceReport1->increment("view_count", 2);
     }

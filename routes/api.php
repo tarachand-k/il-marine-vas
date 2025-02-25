@@ -63,20 +63,28 @@ Route::prefix("v1")->group(function () {
             ]
         ]);
 
-        Route::post("mlce-assignments/{mlce_assignment}/assignee-location-tracks",
-            [AssigneeLocationTrackController::class, "store"]);
-
-        Route::prefix("mlce-assignments/{mlce_assignment}")
-            ->controller(MlceAssignmentController::class)->group(function () {
+        Route::prefix("mlce-assignments/{mlce_assignment}")->group(function () {
+            Route::controller(MlceAssignmentController::class)->group(function () {
                 Route::patch("complete", "completeAssignment");
                 Route::patch("cancel", "cancelAssignment");
             });
 
-        Route::prefix("mlce-reports/{mlce_report}")
-            ->controller(MlceReportController::class)->group(function () {
+            Route::post("assignee-location-tracks", [AssigneeLocationTrackController::class, "store"]);
+        });
+
+        Route::prefix("mlce-reports/{mlce_report}")->group(function () {
+            Route::controller(MlceReportController::class)->group(function () {
                 Route::patch("approve", "approveReport");
                 Route::patch("publish", "publishReport");
             });
+
+            Route::controller(ReportViewController::class)->group(function () {
+                Route::get("view-stats", "stats");
+                Route::get("report-wise-views", "reportWiseViews");
+                Route::get("page-wise-views", "pageWiseViews");
+            });
+        });
+
 
         Route::get("dashboard", DashboardController::class);
     });
