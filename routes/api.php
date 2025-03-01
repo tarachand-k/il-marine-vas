@@ -10,12 +10,15 @@ use App\Http\Controllers\Api\V1\CommandController;
 use App\Http\Controllers\Api\V1\CustomerController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\MarineVasController;
+use App\Http\Controllers\Api\V1\MarketingController;
 use App\Http\Controllers\Api\V1\MlceAssignmentController;
 use App\Http\Controllers\Api\V1\MlceIndentController;
 use App\Http\Controllers\Api\V1\MlceRecommendationController;
 use App\Http\Controllers\Api\V1\MlceReportController;
 use App\Http\Controllers\Api\V1\MlceTypeController;
 use App\Http\Controllers\Api\V1\NavigationReportManualController;
+use App\Http\Controllers\Api\V1\PresentationController;
+use App\Http\Controllers\Api\V1\PresentationViewController;
 use App\Http\Controllers\Api\V1\ReportViewController;
 use App\Http\Controllers\Api\V1\SopController;
 use App\Http\Controllers\Api\V1\UserController;
@@ -55,8 +58,9 @@ Route::prefix("v1")->group(function () {
             "mlce-reports" => MlceReportController::class,
             "mlce-reports.views" => ReportViewController::class,
             "videos" => VideoController::class,
-            "videos.views" => VideoViewController::class,
+            "presentations" => PresentationController::class,
             "sops" => SopController::class,
+            "marketings" => MarketingController::class,
         ], [
             // ⛔ do not delete or update this, else the updating will not work.
             'parameters' => [
@@ -87,6 +91,19 @@ Route::prefix("v1")->group(function () {
             });
         });
 
+        Route::prefix("videos/{video}/views")->controller(VideoViewController::class)
+            ->group(function () {
+                Route::post("", "store");
+                Route::get("stats", "stats");
+                Route::get("users/{user_id}", "getViewsByUser");
+            });
+
+        Route::prefix("presentations/{presentation}/views")->controller(PresentationViewController::class)
+            ->group(function () {
+                Route::post("", "store");
+                Route::get("stats", "stats");
+                Route::get("users/{user_id}", "getViewsByUser");
+            });
 
         Route::get("dashboard", DashboardController::class);
     });

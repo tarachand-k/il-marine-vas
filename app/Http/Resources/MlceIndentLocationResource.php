@@ -15,6 +15,8 @@ class MlceIndentLocationResource extends JsonResource
 
             'mlce_indent_id' => $this->mlce_indent_id,
 
+            'mlce_visit_date' => $this->mlce_visit_date,
+            'cargo_risk_assessment_at' => $this->cargo_risk_assessment_at,
             'location' => $this->location,
             'address' => $this->address,
             'spoc_name' => $this->spoc_name,

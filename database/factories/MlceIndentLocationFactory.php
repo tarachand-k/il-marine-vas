@@ -14,6 +14,8 @@ class MlceIndentLocationFactory extends Factory
 
     public function definition(): array {
         return [
+            'mlce_visit_date' => $this->faker->date,
+            'cargo_risk_assessment_at' => $this->faker->date,
             'location' => $this->faker->word(),
             'address' => $this->faker->address(),
             'spoc_name' => $this->faker->name(),

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class VideoViewRequest extends FormRequest
+class PresentationViewRequest extends FormRequest
 {
     public function rules(): array {
         return [

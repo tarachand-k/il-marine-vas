@@ -2,25 +2,33 @@
 
 namespace App\Models;
 
+use Abbasudo\Purity\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class VideoView extends Model
+class PresentationView extends Model
 {
-    use HasFactory;
+    use HasFactory, Filterable;
 
     public $timestamps = false;
 
+    public $filterFields = [
+        "presentation_id",
+        "user_id",
+
+        "viewed_at",
+    ];
+
     protected $fillable = [
-        'video_id',
+        'presentation_id',
 
         'user_id',
         'viewed_at',
     ];
 
-    public function video(): BelongsTo {
-        return $this->belongsTo(Video::class);
+    public function presentation(): BelongsTo {
+        return $this->belongsTo(Presentation::class);
     }
 
     public function user(): BelongsTo {

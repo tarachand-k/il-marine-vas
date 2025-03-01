@@ -11,12 +11,9 @@ return new class extends Migration {
 
             $table->string('name');
             $table->string("email")->unique();
-            $table->string("mobile_no", 20);
-            $table->string('policy_no', 40);
-            $table->string('policy_type');
-            $table->date('coverage_from');
-            $table->date('coverage_to');
-            $table->text('address')->nullable();
+            $table->string("mobile_no", 20)->unique();
+            $table->string('transit_coverage_from');
+            $table->string('transit_coverage_to');
             $table->longText('about')->nullable();
             $table->longText('coverage_terms')->nullable();
             $table->longText('cargo_details')->nullable();

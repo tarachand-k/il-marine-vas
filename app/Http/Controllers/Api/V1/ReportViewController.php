@@ -12,11 +12,9 @@ class ReportViewController extends Controller
 {
     public function index(MlceReport $mlceReport): JsonResponse {
         $reportViews = $this->paginateOrGet(
-            $mlceReport->views()->with("user")->latest("viewed_at"));
+            $mlceReport->views()->with("user:id,name,email,mobile_no,role")->latest("viewed_at"));
 
-        return $this->respondWithResourceCollection(
-            ReportViewResource::collection($reportViews)
-        );
+        return $this->respondSuccess(null, $reportViews);
     }
 
     public function store(ReportViewRequest $request, MlceReport $mlceReport): JsonResponse {

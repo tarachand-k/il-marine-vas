@@ -8,6 +8,7 @@ enum UserRole: string
     case MARINE_EXT_TEAM_MEMBER = 'Marine EXT Team';
     case MARINE_MLCE_TEAM_MEMBER = 'Marine MLCE Team';
     case RM = 'RM';
+    case VERTICAL_RM = 'Vertical RM';
     case CHANNEL_PARTNER = 'Channel Partner';
     case UW = 'U/W';
     case INSURED_ADMIN = 'Insured Admin';

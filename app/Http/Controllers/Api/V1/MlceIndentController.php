@@ -14,7 +14,8 @@ use Illuminate\Http\JsonResponse;
 class MlceIndentController extends Controller
 {
     protected array $relations = [
-        "createdBy", "customer", "mlceType", "users", "locations", "assignments", "report",
+        "createdBy", "customer", "mlceType", "insuredRepresentative", "rm", "verticalRm",
+        "underWriter", "users", "locations", "assignments", "report",
     ];
 
     protected ?string $resourceName = "mlce-indents";

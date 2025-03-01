@@ -18,14 +18,42 @@ class MlceIndent extends Model
         'created_by_id',
         'customer_id',
         'mlce_type_id',
-        'indent_code'
+        "insured_representative_id",
+        "rm_id",
+        "vertical_rm_id",
+        "under_writer_id",
+
+        'indent_code',
+        'ref_no',
+        'policy_no',
+        'policy_type',
+        'policy_start_date',
+        'policy_end_date',
     ];
 
     protected $fillable = [
         'created_by_id',
         'customer_id',
         'mlce_type_id',
+        "insured_representative_id",
+        "rm_id",
+        "vertical_rm_id",
+        "under_writer_id",
 
+        'ref_no',
+        'policy_no',
+        'policy_no',
+        'policy_type',
+        'policy_start_date',
+        'policy_end_date',
+        'hub',
+        'gwp',
+        'nic',
+        'nep',
+        'lr_percentage',
+        'vertical_name',
+        'insured_commodity',
+        'industry',
         'job_scope',
         'why_mlce'
     ];
@@ -58,6 +86,22 @@ class MlceIndent extends Model
         return $this->belongsTo(MlceType::class);
     }
 
+    public function insuredRepresentative(): BelongsTo {
+        return $this->belongsTo(User::class, "insured_representative_id");
+    }
+
+    public function rm(): BelongsTo {
+        return $this->belongsTo(User::class, "rm_id");
+    }
+
+    public function verticalRm(): BelongsTo {
+        return $this->belongsTo(User::class, "vertical_rm_id");
+    }
+
+    public function underWriter(): BelongsTo {
+        return $this->belongsTo(User::class, "under_writer_id");
+    }
+
     public function users(): BelongsToMany {
         return $this->belongsToMany(User::class)
             ->using(MlceIndentUser::class)
@@ -75,5 +119,11 @@ class MlceIndent extends Model
 
     public function locations(): HasMany {
         return $this->hasMany(MlceIndentLocation::class, 'mlce_indent_id');
+    }
+
+    protected function casts(): array {
+        return [
+            'job_scope' => 'array',
+        ];
     }
 }

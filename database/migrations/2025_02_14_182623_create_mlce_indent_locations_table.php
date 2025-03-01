@@ -13,6 +13,8 @@ return new class extends Migration {
             $table->foreignId('mlce_indent_id')->constrained("mlce_indents")
                 ->cascadeOnDelete();
 
+            $table->date('mlce_visit_date');
+            $table->string('cargo_risk_assessment_at');
             $table->string('location');
             $table->text('address')->nullable();
             $table->string('spoc_name')->nullable();

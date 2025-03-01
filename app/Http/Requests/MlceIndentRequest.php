@@ -14,9 +14,26 @@ class MlceIndentRequest extends FormRequest
             'created_by_id' => ['required', 'exists:users,id'],
             'customer_id' => ['required', 'exists:customers,id'],
             'mlce_type_id' => ['required', 'exists:mlce_types,id'],
+            'insured_representative_id' => ['required', 'exists:users,id'],
+            'rm_id' => ['required', 'exists:users,id'],
+            'vertical_rm_id' => ['required', 'exists:users,id'],
+            'under_writer_id' => ['required', 'exists:users,id'],
+
+            'ref_no' => ['required', 'string'],
+            'policy_no' => ['required', 'string'],
+            'policy_type' => ['required', 'string'],
+            'policy_start_date' => ['required', 'date_format:Y-m-d'],
+            'policy_end_date' => ['required', 'date_format:Y-m-d'],
+            'hub' => ['nullable', 'string'],
+            'gwp' => ['nullable', 'string'],
+            'nic' => ['nullable', 'string'],
+            'nep' => ['nullable', 'string'],
+            'lr_percentage' => ['nullable', 'string'],
+            'vertical_name' => ['nullable', 'string'],
+            'insured_commodity' => ['nullable', 'string'],
+            'industry' => ['nullable', 'string'],
             'pdr_observation' => ['nullable', ...$this->validateFile("pdr_observation")],
             'job_scope' => ['nullable', "string"],
-            'why_mlce' => ['nullable', 'string'],
 
             'users' => ["nullable", 'array'],
             "users.*.id" => ["sometimes", 'exists:mlce_indent_user,id'],
@@ -30,6 +47,8 @@ class MlceIndentRequest extends FormRequest
 
             "locations" => ["required", "array", "min:1"],
             "locations.*.id" => ["nullable", "exists:mlce_indent_locations,id"],
+            'locations.*.mlce_visit_date' => ['required', 'date_format:Y-m-d'],
+            'locations.*.cargo_risk_assessment_at' => ['required', 'string'],
             'locations.*.location' => ['required', 'string'],
             'locations.*.address' => ['nullable'],
             'locations.*.spoc_name' => ['nullable'],
@@ -44,6 +63,16 @@ class MlceIndentRequest extends FormRequest
             $rules["created_by_id"][0] = "sometimes";
             $rules["customer_id"][0] = "sometimes";
             $rules["mlce_type_id"][0] = "sometimes";
+            $rules["insured_representative_id"][0] = "sometimes";
+            $rules["rm_id"][0] = "sometimes";
+            $rules["vertical_rm_id"][0] = "sometimes";
+            $rules["under_writer_id"][0] = "sometimes";
+
+            $rules["ref_no"][0] = "sometimes";
+            $rules["policy_no"][0] = "sometimes";
+            $rules["policy_type"][0] = "sometimes";
+            $rules["policy_start_date"][0] = "sometimes";
+            $rules["policy_end_date"][0] = "sometimes";
 
             $rules["users.*.user_id"][0] = "sometimes";
             $rules["locations"] = ["sometimes", "array"];

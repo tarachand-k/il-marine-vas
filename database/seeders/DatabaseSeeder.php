@@ -12,6 +12,7 @@ use App\Models\AssigneeLocationTrack;
 use App\Models\AssignmentObservation;
 use App\Models\Customer;
 use App\Models\MarineVas;
+use App\Models\Marketing;
 use App\Models\MlceAssignment;
 use App\Models\MlceIndent;
 use App\Models\MlceIndentLocation;
@@ -31,40 +32,6 @@ class DatabaseSeeder extends Seeder
      * Seed the application's database.
      */
     public function run(): void {
-        $customer1 = Customer::factory()->create([
-            "name" => "Customer 1",
-            "email" => "customer1@admin.com",
-        ]);
-
-        $customer2 = Customer::factory()->create([
-            "name" => "Customer 2",
-            "email" => "customer2@admin.com",
-        ]);
-
-        collect(array_column(UserRole::cases(), "value"))->each(function ($role) use ($customer1) {
-            User::factory()->create([
-                "created_by_id" => $role !== UserRole::ILGIC_MLCE_ADMIN->value ? 1 : null,
-                "customer_id" =>
-                    in_array($role, [UserRole::INSURED_ADMIN->value, UserRole::INSURED_REPRESENTATIVE->value])
-                        ? $customer1->id
-                        : null,
-                "name" => $role,
-                "email" => $role === UserRole::ILGIC_MLCE_ADMIN->value
-                    ? "admin@admin.com"
-                    : implode("-", explode(" ", strtolower($role)))."@admin.com",
-                "role" => $role,
-            ]);
-        });
-
-        collect(["Insured Admin", "Insured Representative"])->each(function ($role) use ($customer2) {
-            User::factory()->create([
-                "created_by_id" => 1,
-                "customer_id" => $customer2->id,
-                "name" => $role,
-                "email" => implode("-", explode(" ", strtolower($role)))."2@admin.com",
-                "role" => $role,
-            ]);
-        });
 
         Acknowledgment::factory()->create([
             "title" => "Acknowledgment 1",
@@ -112,85 +79,127 @@ class DatabaseSeeder extends Seeder
 
         MlceType::factory()->createMany($mlceTypes);
 
-        $mlceIndent1 = MlceIndent::factory()->create([
-            "created_by_id" => 1,
-            "mlce_type_id" => 3,
-            "customer_id" => $customer1->id,
+        $admin = User::factory()->create([
+            "name" => "IL Admin",
+            "email" => "admin@admin.com",
+            "role" => UserRole::INSURED_ADMIN->value,
         ]);
 
-        $mlceIndent2 = MlceIndent::factory()->create([
-            "created_by_id" => 1,
-            "mlce_type_id" => 3,
-            "customer_id" => $customer2->id,
+        $roles = collect(array_column(UserRole::cases(), "value"));
+        $systemRoles = $roles->filter(fn($role) => !(in_array($role,
+            [UserRole::INSURED_ADMIN->value, UserRole::INSURED_REPRESENTATIVE->value])));
+        $insuredRoles = $roles->filter(fn($role) => in_array($role,
+            [UserRole::INSURED_ADMIN->value, UserRole::INSURED_REPRESENTATIVE->value]));
+        $systemRolesWithoutAdmin = $systemRoles->filter(fn($role) => $role !== UserRole::INSURED_ADMIN);
+
+        $systemRolesWithoutAdmin->each(function ($role) use ($admin) {
+            User::factory()->create([
+                "created_by_id" => $admin->id,
+                "email" => implode("-", explode(" ", strtolower($role)))."@admin.com",
+                "role" => $role,
+            ]);
+        });
+
+        $customer1 = Customer::factory()->create([
+            "name" => "Customer 1",
+            "email" => "customer1@admin.com",
         ]);
 
-        $mlceIndent1->users()->attach(4, ["type" => "RM"]);
-        $mlceIndent1->users()->attach(6, ["type" => "U/W"]);
-        $mlceIndent2->users()->attach(4, ["type" => "RM"]);
-        $mlceIndent2->users()->attach(6, ["type" => "U/W"]);
-
-        $indentLocation1 = MlceIndentLocation::factory()->create([
-            "mlce_indent_id" => $mlceIndent1->id,
-            "location" => "Mumbai",
-            "status" => MlceIndentLocationStatus::NOT_ASSIGNED->value,
+        $customer2 = Customer::factory()->create([
+            "name" => "Customer 2",
+            "email" => "customer2@admin.com",
         ]);
 
-        $mlceAssignment1 = MlceAssignment::factory()->create([
-            "mlce_indent_id" => $mlceIndent1->id,
-            "mlce_indent_location_id" => $indentLocation1->id,
-            "inspector_id" => 2,
-            "supervisor_id" => 3,
-        ]);
+        // created users for customer 1
+        $insuredRoles->each(function ($role) use ($admin, $customer1) {
+            User::factory()->create([
+                "created_by_id" => $admin->id,
+                "customer_id" => $customer1->id,
+                "email" => implode("-", explode(" ", strtolower($role)))."@admin.com",
+                "role" => $role,
+            ]);
+        });
 
-        $indentLocation2 = MlceIndentLocation::factory()->create([
-            "mlce_indent_id" => $mlceIndent2->id,
-            "location" => "Mumbai",
-            "status" => MlceIndentLocationStatus::NOT_ASSIGNED->value,
-        ]);
+        // create users for customer 2
+        $insuredRoles->each(function ($role) use ($admin, $customer2) {
+            User::factory()->create([
+                "created_by_id" => $admin->id,
+                "customer_id" => $customer2->id,
+                "role" => $role,
+            ]);
+        });
 
-        $mlceAssignment2 = MlceAssignment::factory()->create([
-            "mlce_indent_id" => $mlceIndent2->id,
-            "mlce_indent_location_id" => $indentLocation1->id,
-            "inspector_id" => 2,
-            "supervisor_id" => 3,
-        ]);
+        Customer::all()->each(function ($customer) use ($admin) {
+            $mlceIndent = MlceIndent::factory()->create([
+                "created_by_id" => $admin->id,
+                "mlce_type_id" => 3,
+                "customer_id" => $customer->id,
+                "insured_representative_id" => User::where("role",
+                    UserRole::INSURED_REPRESENTATIVE->value)->where("customer_id", $customer->id)->first()->id,
+                "rm_id" => User::where("role", UserRole::RM->value)->first()->id,
+                "vertical_rm_id" => User::where("role", UserRole::VERTICAL_RM->value)->first()->id,
+                "under_writer_id" => User::where("role", UserRole::UW->value)->first()->id,
+            ]);
+
+            $mlceIndent->users()->attach(4, ["type" => "RM"]);
+            $mlceIndent->users()->attach(6, ["type" => "U/W"]);
+
+
+            $indentLocation = MlceIndentLocation::factory()->create([
+                "mlce_indent_id" => $mlceIndent->id,
+                "location" => "Mumbai",
+                "status" => MlceIndentLocationStatus::NOT_ASSIGNED->value,
+            ]);
+
+            $mlceAssignment = MlceAssignment::factory()->create([
+                "mlce_indent_id" => $mlceIndent->id,
+                "mlce_indent_location_id" => $indentLocation->id,
+                "inspector_id" => 2,
+                "supervisor_id" => 3,
+            ]);
+
+            $mlceReport = MlceReport::factory()->create([
+                "mlce_indent_id" => $mlceIndent->id,
+                "customer_id" => $mlceIndent->customer_id,
+            ]);
+        });
+
+        $mlceIndent = MlceIndent::first();
+        $mlceAssignment = MlceAssignment::first();
 
         AssigneeLocationTrack::factory()->create([
-            "mlce_assignment_id" => $mlceAssignment1->id,
+            "mlce_assignment_id" => $mlceAssignment->id,
             'status' => AssigneeLocationTrackStatus::CMMI->value,
         ]);
         AssigneeLocationTrack::factory()->create([
-            "mlce_assignment_id" => $mlceAssignment1->id,
+            "mlce_assignment_id" => $mlceAssignment->id,
             'status' => AssigneeLocationTrackStatus::ROS_2C_MLCE->value,
         ]);
 
-        AssignmentObservation::factory()->create(["mlce_assignment_id" => $mlceAssignment1->id,]);
-        AssignmentObservation::factory()->create(["mlce_assignment_id" => $mlceAssignment1->id,]);
+        AssignmentObservation::factory()->create(["mlce_assignment_id" => $mlceAssignment->id,]);
+        AssignmentObservation::factory()->create(["mlce_assignment_id" => $mlceAssignment->id,]);
 
-        MlceRecommendation::factory()->create(["mlce_assignment_id" => $mlceAssignment1->id]);
-        MlceRecommendation::factory()->create(["mlce_assignment_id" => $mlceAssignment1->id]);
+        MlceRecommendation::factory()->create(["mlce_assignment_id" => $mlceAssignment->id]);
+        MlceRecommendation::factory()->create(["mlce_assignment_id" => $mlceAssignment->id]);
 
         AssigneeLocationTrack::factory()->create([
-            "mlce_assignment_id" => $mlceAssignment1->id,
+            "mlce_assignment_id" => $mlceAssignment->id,
             'status' => AssigneeLocationTrackStatus::CMCD->value,
         ]);
         AssigneeLocationTrack::factory()->create([
-            "mlce_assignment_id" => $mlceAssignment1->id,
+            "mlce_assignment_id" => $mlceAssignment->id,
             'status' => AssigneeLocationTrackStatus::DMC->value,
         ]);
 
-        $mlceAssignment1->update([
+        $mlceAssignment->update([
             "location_status" => AssigneeLocationTrackStatus::DMC->value,
             "status" => MlceAssignmentStatus::COMPLETED->value,
             "completed_at" => now()->format("Y-m-d H:i:s")
         ]);
 
-        $mlceReport1 = MlceReport::factory()->create([
-            "mlce_indent_id" => $mlceIndent1->id,
-            "customer_id" => $mlceIndent1->customer_id,
-        ]);
+        $mlceReport = MlceReport::first();
 
-        $mlceReport1->views()->createMany([
+        $mlceReport->views()->createMany([
             [
                 "user_id" => 7,
                 "ip_address" => fake()->ipv4(),
@@ -215,6 +224,8 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
-        $mlceReport1->increment("view_count", 2);
+        $mlceReport->increment("view_count", 2);
+
+        Marketing::factory()->create();
     }
 }

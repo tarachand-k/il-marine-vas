@@ -18,6 +18,7 @@ class MlceReportFactory extends Factory
             'acknowledgment' => $this->faker->paragraphs(),
             'about_us' => $this->faker->paragraphs(),
             'marine_vas' => $this->faker->paragraphs(),
+            'why_mlce' => $this->faker->paragraphs(),
             'navigation_report_manual' => $this->faker->paragraphs(),
             'findings' => $this->faker->paragraphs(),
             'observation_closure_summery' => $this->faker->paragraphs(),

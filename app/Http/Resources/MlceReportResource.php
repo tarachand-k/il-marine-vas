@@ -20,6 +20,7 @@ class MlceReportResource extends JsonResource
             'acknowledgment' => $this->acknowledgment,
             'about_us' => $this->about_us,
             'marine_vas' => $this->marine_vas,
+            'why_mlce' => $this->why_mlce,
             'navigation_report_manual' => $this->navigation_report_manual,
             'findings' => $this->findings,
             'observation_closure_summery' => $this->observation_closure_summery,

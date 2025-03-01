@@ -14,6 +14,8 @@ class MlceIndentLocation extends Model
     public $filterFields = [
         'mlce_indent_id',
 
+        'mlce_visit_date',
+        'cargo_risk_assessment_at',
         'location',
         'spoc_name',
         'spoc_email',
@@ -25,6 +27,8 @@ class MlceIndentLocation extends Model
     protected $fillable = [
         'mlce_indent_id',
 
+        'mlce_visit_date',
+        'cargo_risk_assessment_at',
         'location',
         'address',
         'spoc_name',

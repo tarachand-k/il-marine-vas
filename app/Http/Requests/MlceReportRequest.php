@@ -15,6 +15,7 @@ class MlceReportRequest extends FormRequest
             'acknowledgment' => ['nullable', 'array'],
             'about_us' => ['nullable', 'array'],
             'marine_vas' => ['nullable', 'array'],
+            'why_mlce' => ['nullable', 'array'],
             'navigation_report_manual' => ['nullable', 'array'],
             'findings' => ['nullable', 'array'],
             'observation_closure_summery' => ['nullable', 'array'],

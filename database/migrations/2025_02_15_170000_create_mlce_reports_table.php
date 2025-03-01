@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->longText('acknowledgment')->nullable();
             $table->longText('about_us')->nullable();
             $table->longText('marine_vas')->nullable();
+            $table->longText("why_mlce")->nullable();
             $table->longText('navigation_report_manual')->nullable();
             $table->longText('findings')->nullable();
             $table->longText('observation_closure_summery')->nullable();

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Video extends Model
+class Presentation extends Model
 {
     use HasFactory;
 
@@ -21,6 +21,7 @@ class Video extends Model
 
         'title',
         'description',
+        'presentation',
         'view_count',
     ];
 
@@ -29,10 +30,10 @@ class Video extends Model
     }
 
     public function allowedUsers(): BelongsToMany {
-        return $this->belongsToMany(User::class, 'video_user');
+        return $this->belongsToMany(User::class, 'presentation_user');
     }
 
     public function views(): HasMany {
-        return $this->hasMany(VideoView::class);
+        return $this->hasMany(PresentationView::class, 'presentation_id');
     }
 }
