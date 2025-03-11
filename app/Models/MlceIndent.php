@@ -102,10 +102,8 @@ class MlceIndent extends Model
         return $this->belongsTo(User::class, "under_writer_id");
     }
 
-    public function users(): BelongsToMany {
-        return $this->belongsToMany(User::class)
-            ->using(MlceIndentUser::class)
-            ->withPivot(['id', 'type']);
+    public function allowedUsers(): BelongsToMany {
+        return $this->belongsToMany(User::class, 'mlce_indent_user');
     }
 
     public function assignments(): HasMany {

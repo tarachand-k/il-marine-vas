@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Enums\MlceIndentLocationStatus;
-use App\Enums\MlceIndentUserType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -35,15 +34,8 @@ class MlceIndentRequest extends FormRequest
             'pdr_observation' => ['nullable', ...$this->validateFile("pdr_observation")],
             'job_scope' => ['nullable', "string"],
 
-            'users' => ["nullable", 'array'],
-            "users.*.id" => ["sometimes", 'exists:mlce_indent_user,id'],
-            "users.*.user_id" => ["nullable", "exists:users,id"],
-            "users.*.type" => ["required", Rule::enum(MlceIndentUserType::class)],
-
-            // Guest-specific validation
-            "users.*.name" => ["nullable", "required_if:users.*.type,Guest", "string"],
-            "users.*.email" => ["nullable", "required_if:users.*.type,Guest", "email", Rule::unique("users", "email")],
-            "users.*.mobile_no" => ["nullable", "required_if:users.*.type,Guest", "string", "max:20"],
+            'allowed_users' => ["required", 'array'],
+            "allowed_users.*" => ["required", 'exists:users,id'],
 
             "locations" => ["required", "array", "min:1"],
             "locations.*.id" => ["nullable", "exists:mlce_indent_locations,id"],
@@ -74,8 +66,10 @@ class MlceIndentRequest extends FormRequest
             $rules["policy_start_date"][0] = "sometimes";
             $rules["policy_end_date"][0] = "sometimes";
 
-            $rules["users.*.user_id"][0] = "sometimes";
+            $rules["allowed_users"][0] = "sometimes";
             $rules["locations"] = ["sometimes", "array"];
+            $rules["locations.*.mlce_visit_date"][0] = "sometimes";
+            $rules["locations.*.cargo_risk_assessment_at"][0] = "sometimes";
             $rules["locations.*.location"][0] = "sometimes";
             $rules["locations.*.spoc_email"][3] = "";
         }

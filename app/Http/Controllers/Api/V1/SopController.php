@@ -2,22 +2,32 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SopRequest;
 use App\Http\Resources\SopResource;
 use App\Models\Sop;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class SopController extends Controller
 {
-    protected array $relations = ["customer"];
+    protected array $relations = ["customer", "allowedUsers"];
 
     protected array $fileFieldNames = ["pdf"];
 
     protected array $fileFolderPaths = ["sops"];
 
-    public function index(): JsonResponse {
-        $sops = $this->paginateOrGet(Sop::filter()->latest());
+    public function index(Request $request): JsonResponse {
+        $user = $request->user();
+        $query = Sop::query();
+
+        if ($user->role !== UserRole::ILGIC_MLCE_ADMIN->value) {
+            $query->whereHas("allowedUsers", fn($query) => $query->where("users.id", $user->id));
+        }
+
+        $sops = $this->paginateOrGet(
+            $query->with($this->getRelations())->filter()->latest());
 
         return $this->respondWithResourceCollection(
             SopResource::collection($sops)
@@ -31,6 +41,10 @@ class SopController extends Controller
         $sop = new Sop($request->validated());
         $this->storeFiles($request, $sop);
         $sop->save();
+
+        if ($request->has("allowed_users")) {
+            $sop->allowedUsers()->attach($request->validated("allowed_users"));
+        }
 
         return $this->respondCreated(
             new SopResource($sop),
@@ -52,6 +66,10 @@ class SopController extends Controller
         $sop->fill($request->validated());
         $this->updateFiles($request, $sop);
         $sop->save();
+
+        if ($request->has("allowed_users")) {
+            $sop->allowedUsers()->sync($request->validated("allowed_users"));
+        }
 
         return $this->respondUpdated(
             new SopResource($sop),

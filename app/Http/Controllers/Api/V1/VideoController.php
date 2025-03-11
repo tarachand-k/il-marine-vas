@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VideoRequest;
 use App\Http\Resources\VideoResource;
 use App\Models\Video;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class VideoController extends Controller
 {
@@ -26,9 +28,16 @@ class VideoController extends Controller
     /**
      * Display a listing of the videos.
      */
-    public function index(): JsonResponse {
+    public function index(Request $request): JsonResponse {
+        $user = $request->user();
+        $query = Video::query();
+
+        if ($user->role !== UserRole::ILGIC_MLCE_ADMIN->value) {
+            $query->whereHas("allowedUsers", fn($query) => $query->where("users.id", $user->id));
+        }
+
         $videos = $this->paginateOrGet(
-            Video::with($this->getRelations())->latest());
+            $query->with($this->getRelations())->latest());
 
         return $this->respondWithResourceCollection(
             VideoResource::collection($videos)

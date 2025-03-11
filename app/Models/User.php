@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -53,6 +54,22 @@ class User extends Model implements CanResetPasswordContract
 
     public function createdBy(): BelongsTo {
         return $this->belongsTo(User::class, "created_by_id");
+    }
+
+    public function videos(): BelongsToMany {
+        return $this->belongsToMany(Video::class, 'video_user');
+    }
+
+    public function presentations(): BelongsToMany {
+        return $this->belongsToMany(Presentation::class, 'presentation_user');
+    }
+
+    public function mlceIndents(): BelongsToMany {
+        return $this->belongsToMany(MlceIndent::class, 'mlce_indent_user');
+    }
+
+    public function sops(): BelongsToMany {
+        return $this->belongsToMany(Sop::class, "sop_user");
     }
 
     /**

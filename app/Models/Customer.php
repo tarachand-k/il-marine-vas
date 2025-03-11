@@ -5,6 +5,7 @@ namespace App\Models;
 use Abbasudo\Purity\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Customer extends Model
 {
@@ -29,6 +30,14 @@ class Customer extends Model
         "cargo_details",
         "transit_details",
     ];
+
+    public function users(): HasMany {
+        return $this->hasMany(User::class, 'customer_id');
+    }
+
+    public function mlceRecommendations(): HasMany {
+        return $this->hasMany(MlceRecommendation::class, 'customer_id');
+    }
 
     protected function casts(): array {
         return [

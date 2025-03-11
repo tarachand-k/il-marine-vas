@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PresentationRequest;
 use App\Http\Resources\PresentationResource;
 use App\Models\Presentation;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class PresentationController extends Controller
 {
@@ -26,9 +28,17 @@ class PresentationController extends Controller
     /**
      * Display a listing of the presentations.
      */
-    public function index(): JsonResponse {
+    public function index(Request $request): JsonResponse {
+        $user = $request->user();
+        $query = Presentation::query();
+
+        if ($user->role !== UserRole::ILGIC_MLCE_ADMIN->value) {
+            $query->whereHas("allowedUsers", fn($query) => $query->where("users.id", $user->id));
+        }
+
         $presentations = $this->paginateOrGet(
-            Presentation::with($this->getRelations())->latest());
+            $query->with($this->getRelations())->latest());
+
 
         return $this->respondWithResourceCollection(
             PresentationResource::collection($presentations)

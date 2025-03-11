@@ -7,11 +7,10 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void {
         Schema::create('video_user', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('video_id');
             $table->foreignId('user_id');
 
-            $table->unique(['video_id', 'user_id']);
+            $table->primary(['video_id', 'user_id']);
         });
     }
 

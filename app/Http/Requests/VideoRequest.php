@@ -24,7 +24,7 @@ class VideoRequest extends FormRequest
             $rules["video"] = $this->hasFile("video")
                 ? ["nullable", "file"]
                 : ["nullable", "string", "max:100"];
-            $rules["users"][0] = "sometimes";
+            $rules["allowed_users"][0] = "sometimes";
         }
 
         return $rules;

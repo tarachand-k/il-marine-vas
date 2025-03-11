@@ -46,7 +46,7 @@ class MlceIndentResource extends JsonResource
             'rm' => new UserResource($this->whenLoaded("rm")),
             'vertical_rm' => new UserResource($this->whenLoaded("verticalRm")),
             'under_writer' => new UserResource($this->whenLoaded("underWriter")),
-            'users' => UserResource::collection($this->whenLoaded("users")),
+            'allowed_users' => UserResource::collection($this->whenLoaded("allowedUsers")),
             "locations" => MlceIndentLocationResource::collection($this->whenLoaded("locations")),
             "assignments" => MlceAssignmentResource::collection($this->whenLoaded("assignments")),
             "report" => new MlceReportResource($this->whenLoaded("report")),

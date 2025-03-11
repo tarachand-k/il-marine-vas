@@ -30,8 +30,10 @@ class UserResource extends JsonResource
             // relations
             "created_by" => new UserResource($this->whenLoaded("createdBy")),
             "customer" => new CustomerResource($this->whenLoaded("customer")),
-            'mlce_indent_user' => new MlceIndentUserResource(
-                $this->whenPivotLoaded("mlce_indent_user", $this->pivot)),
+            "mlce_indents_count" => $this->whenCounted("mlceIndents", $this->mlce_indents_count),
+            "sops_count" => $this->whenCounted("sops", $this->sops_count),
+            "videos_count" => $this->whenCounted("videos", $this->videos_count),
+            "presentations_count" => $this->whenCounted("presentations", $this->presentations_count),
 
             // timestamps
             'created_at' => $this->created_at,

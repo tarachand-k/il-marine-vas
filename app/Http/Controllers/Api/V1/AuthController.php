@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
@@ -52,6 +53,10 @@ class AuthController extends Controller
         }
 
         $user->update(['last_login_at' => now()]);
+
+        if ($user->role !== UserRole::ILGIC_MLCE_ADMIN->value) {
+            $user->loadCount("mlceIndents", "sops", "videos", "presentations");
+        }
 
         // Create token
         $token = $user->createToken('auth_token')->plainTextToken;

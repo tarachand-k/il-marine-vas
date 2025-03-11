@@ -12,6 +12,9 @@ class SopRequest extends FormRequest
             'pdf' => ['required', 'file', "max:2048"],
             'start_date' => ['required', 'date_format:Y-m-d'],
             'end_date' => ['required', 'date_format:Y-m-d'],
+
+            'allowed_users' => ["required", "array"],
+            "allowed_users.*" => ["required", "exists:users,id"],
         ];
 
         if ($this->routeIs("sops.update")) {
@@ -21,6 +24,7 @@ class SopRequest extends FormRequest
                 : ["sometimes", "string", "max:100"];
             $rules["start_date"][0] = "sometimes";
             $rules["end_date"][0] = "sometimes";
+            $rules["allowed_users"][0] = "sometimes";
         }
 
         return $rules;

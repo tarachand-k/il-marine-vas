@@ -24,7 +24,7 @@ class PresentationRequest extends FormRequest
             $rules["presentation"] = $this->hasFile("presentation")
                 ? ["nullable", "file"]
                 : ["nullable", "string", "max:100"];
-            $rules["users"][0] = "sometimes";
+            $rules["allowed_users"][0] = "sometimes";
         }
 
         return $rules;

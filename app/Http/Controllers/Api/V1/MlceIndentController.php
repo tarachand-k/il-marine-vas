@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Enums\MlceIndentUserType;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MlceIndentRequest;
 use App\Http\Resources\MlceIndentResource;
 use App\Models\MlceIndent;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 
 class MlceIndentController extends Controller
 {
     protected array $relations = [
         "createdBy", "customer", "mlceType", "insuredRepresentative", "rm", "verticalRm",
-        "underWriter", "users", "locations", "assignments", "report",
+        "underWriter", "allowedUsers", "locations", "assignments", "report",
     ];
 
     protected ?string $resourceName = "mlce-indents";
@@ -32,8 +30,15 @@ class MlceIndentController extends Controller
      * Display a listing of the mlceIndents.
      */
     public function index(): JsonResponse {
+        $user = request()->user();
+        $query = MlceIndent::query();
+
+        if ($user->role !== UserRole::ILGIC_MLCE_ADMIN->value) {
+            $query->whereHas("allowedUsers", fn($query) => $query->where("users.id", $user->id));
+        }
+
         $mlceIndents = $this->paginateOrGet(
-            MlceIndent::with($this->getRelations())->filter()->latest());
+            $query->with($this->getRelations())->filter()->latest());
 
         return $this->respondWithResourceCollection(
             MlceIndentResource::collection($mlceIndents)
@@ -50,7 +55,9 @@ class MlceIndentController extends Controller
             $mlceIndent->save();
 
             // attach provided users
-            $this->attachOrSyncUsers($mlceIndent, $request);
+            if ($request->has("allowed_users")) {
+                $mlceIndent->allowedUsers()->attach($request->validated("allowed_users"));
+            }
 
             // create mlce locations if provided
             if ($request->has("locations")) {
@@ -72,40 +79,6 @@ class MlceIndentController extends Controller
         );
     }
 
-    protected function attachOrSyncUsers(
-        MlceIndent $mlceIndent,
-        MlceIndentRequest $request,
-        string $method = "attach",
-    ) {
-        if (!$request->has("users")) {
-            return;
-        }
-
-        $userData = collect($request->validated("users"))->mapWithKeys(function (array $userData) {
-            // if the user type is not Guest or user_id is provided, attach the existing user
-            if (isset($userData["user_id"]) || $userData["type"] !== MlceIndentUserType::GUEST->value) {
-                return [$userData["user_id"] => ["type" => $userData["type"]]];
-            }
-
-            // create a new guest user if type is Guest and user_id is empty
-            $guestUser = User::firstOrCreate([
-                "email" => $userData["email"],
-                "mobile_no" => $userData["mobile_no"]
-            ], [
-                'name' => $userData['name'],
-                'email' => $userData['email'],
-                'mobile_no' => $userData['mobile_no'],
-                'role' => UserRole::GUEST,
-                'password' => $userData["mobile_no"],
-            ]);
-
-            // return the new guest user data to be attached
-            return [$guestUser->id => ['type' => $userData['type']]];
-        });
-
-        $mlceIndent->users()->$method($userData);
-    }
-
     /**
      * Display the specified mlceIndent.
      */
@@ -125,7 +98,9 @@ class MlceIndentController extends Controller
             $mlceIndent->save();
 
             // sync provided users
-            $this->attachOrSyncUsers($mlceIndent, $request, "sync");
+            if ($request->has("allowed_users")) {
+                $mlceIndent->allowedUsers()->sync($request->validated("allowed_users"));
+            }
 
             if (!$request->has("locations")) {
                 return $mlceIndent;

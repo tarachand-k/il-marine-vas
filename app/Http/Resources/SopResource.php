@@ -20,6 +20,7 @@ class SopResource extends JsonResource
             'end_date' => $this->end_date,
 
             'customer' => new CustomerResource($this->whenLoaded('customer')),
+            'allowed_users' => UserResource::collection($this->whenLoaded("allowedUsers")),
 
             // timestamps
             'created_at' => $this->created_at,
