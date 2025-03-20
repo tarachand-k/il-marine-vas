@@ -14,6 +14,8 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+//use Illuminate\Console\Scheduling\Schedule;
+
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -68,4 +70,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(
             fn(QueryException $exception) => $apiResponse->respondQueryException($exception)
         );
-    })->create();
+    })
+//    ->withSchedule(function (Schedule $scheduler) {})
+    ->create();

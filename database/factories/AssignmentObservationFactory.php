@@ -13,9 +13,7 @@ class AssignmentObservationFactory extends Factory
 
     public function definition(): array {
         return [
-            'ref_no' => $this->faker->password(8, 8),
-            'location' => $this->faker->word(),
-            'sub_location' => $this->faker->word(),
+            'location' => $this->faker->streetName(),
             'brief' => $this->faker->word(),
             'type' => $this->faker->word(),
             'current_observation' => $this->faker->paragraph(1),

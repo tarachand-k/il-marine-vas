@@ -12,9 +12,8 @@ return new class extends Migration {
             $table->foreignId('mlce_assignment_id')->constrained("mlce_assignments")
                 ->cascadeOnDelete();
 
-            $table->string('ref_no')->nullable();
+            $table->string('ref_no');
             $table->string('location');
-            $table->string('sub_location')->nullable();
             $table->string('brief')->nullable();
             $table->string('type');
             $table->longText('current_observation');

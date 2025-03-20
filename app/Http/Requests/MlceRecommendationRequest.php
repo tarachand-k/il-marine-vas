@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\CapitalInvolvement;
 use App\Enums\MlceRecommendationClosurePriority;
 use App\Enums\MlceRecommendationStatus;
 use App\Enums\MlceRecommendationTimeline;
@@ -14,12 +15,10 @@ class MlceRecommendationRequest extends FormRequest
         $rules = [
             'mlce_assignment_id' => ['required', 'exists:mlce_assignments,id'],
 
-            'ref_no' => ['required', 'string'],
             'location' => ['required', 'string'],
-            'sub_location' => ['nullable', 'string'],
             'brief' => ['nullable', 'string'],
             'closure_priority' => ['required', Rule::enum(MlceRecommendationClosurePriority::class)],
-            'is_capital_required' => ['boolean'],
+            'capital_involvement' => ['required', Rule::enum(CapitalInvolvement::class)],
             'current_observation' => ['required', 'string'],
             'hazard' => ['nullable', 'string'],
             'recommendations' => ['required', 'string'],
@@ -41,6 +40,7 @@ class MlceRecommendationRequest extends FormRequest
 
             $rules["ref_no"][0] = "sometimes";
             $rules["location"][0] = "sometimes";
+            $rules["capital_involvement"][0] = "sometimes";
             $rules["closure_priority"][0] = "sometimes";
             $rules["current_observation"][0] = "sometimes";
             $rules["recommendations"][0] = "sometimes";

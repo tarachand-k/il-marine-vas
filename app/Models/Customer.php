@@ -15,6 +15,10 @@ class Customer extends Model
         "name",
         "email",
         "mobile_no",
+        'policy_no',
+        'policy_type',
+        'policy_start_date',
+        'policy_end_date',
         "transit_coverage_from",
         "transit_coverage_to",
     ];
@@ -23,8 +27,10 @@ class Customer extends Model
         "name",
         "email",
         "mobile_no",
-        "transit_coverage_from",
-        "transit_coverage_to",
+        'policy_no',
+        'policy_type',
+        'policy_start_date',
+        'policy_end_date',
         "about",
         "coverage_terms",
         "cargo_details",
@@ -33,18 +39,5 @@ class Customer extends Model
 
     public function users(): HasMany {
         return $this->hasMany(User::class, 'customer_id');
-    }
-
-    public function mlceRecommendations(): HasMany {
-        return $this->hasMany(MlceRecommendation::class, 'customer_id');
-    }
-
-    protected function casts(): array {
-        return [
-            'about' => 'array',
-            'coverage_terms' => 'array',
-            'cargo_details' => 'array',
-            'transit_details' => 'array',
-        ];
     }
 }

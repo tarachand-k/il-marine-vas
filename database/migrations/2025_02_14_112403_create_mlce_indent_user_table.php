@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained("users")
                 ->cascadeOnDelete();
 
-            $table->primary("mlce_indent_id", "user_id");
+            $table->primary(["mlce_indent_id", "user_id"]);
         });
     }
 

@@ -28,6 +28,7 @@ class MlceReportResource extends JsonResource
             'mlce_outcome' => $this->mlce_outcome,
             'status' => $this->status,
             'view_count' => $this->view_count,
+            'submitted_at' => $this->submitted_at,
             'approved_at' => $this->approved_at,
             'published_at' => $this->published_at,
 

@@ -39,7 +39,7 @@ class ReportViewController extends Controller
         request()->validate(["user_id" => "required", "exists:users,id"]);
 
         $views = $mlceReport->views()
-            ->whereNot("page_name")
+            ->whereNull("page_name")
             ->where("user_id", request()->query("user_id"))
             ->get();
 

@@ -11,10 +11,9 @@ class MlceIndentFactory extends Factory
 
     public function definition(): array {
         return [
-            'indent_code' => MlceIndent::generateIndentCode(),
+            'ref_no' => MlceIndent::generateRefNo(),
             'pdr_observation' => $this->faker->word(),
             'job_scope' => $this->faker->paragraphs(),
-            'ref_no' => $this->faker->word,
             'policy_no' => $this->faker->word,
             'policy_type' => $this->faker->word,
             'policy_start_date' => $this->faker->date,

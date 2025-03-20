@@ -12,13 +12,14 @@ class CustomerRequest extends FormRequest
             'name' => ['required', 'string'],
             'email' => ['required', "email", Rule::unique("customers")],
             'mobile_no' => ['required', 'string', 'max:20', Rule::unique('customers')],
-
-            'transit_coverage_from' => ['required', 'string'],
-            'transit_coverage_to' => ['required', 'string'],
-            'about' => ['nullable', 'array'],
-            'coverage_terms' => ['nullable', 'array'],
-            'cargo_details' => ['nullable', 'array'],
-            'transit_details' => ['nullable', 'array'],
+            'policy_no' => ['required', 'string'],
+            'policy_type' => ['required', 'string'],
+            'policy_start_date' => ['required', 'date_format:Y-m-d'],
+            'policy_end_date' => ['required', 'date_format:Y-m-d'],
+            'about' => ['nullable', 'string'],
+            'coverage_terms' => ['nullable', 'string'],
+            'cargo_details' => ['nullable', 'string'],
+            'transit_details' => ['nullable', 'string'],
         ];
 
         if ($this->routeIs("customers.update")) {
@@ -29,8 +30,10 @@ class CustomerRequest extends FormRequest
             $rules["email"][2] = Rule::unique("customers")->ignore($customerId);
             $rules["mobile_no"][0] = "sometimes";
             $rules["mobile_no"][3] = Rule::unique("customers")->ignore($customerId);
-            $rules["transit_coverage_from"][0] = "sometimes";
-            $rules["transit_coverage_to"][0] = "sometimes";
+            $rules['policy_no'][0] = "sometimes";
+            $rules['policy_type'][0] = "sometimes";
+            $rules['policy_start_date'][0] = "sometimes";
+            $rules['policy_end_date'][0] = "sometimes";
         }
 
         return $rules;

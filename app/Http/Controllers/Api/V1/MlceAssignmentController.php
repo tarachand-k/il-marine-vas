@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Enums\MlceAssignmentStatus;
 use App\Enums\MlceIndentLocationStatus;
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MlceAssignmentRequest;
 use App\Http\Resources\MlceAssignmentResource;
@@ -18,8 +19,15 @@ class MlceAssignmentController extends Controller
     ];
 
     public function index(): JsonResponse {
+        $user = request()->user();
+        $query = MlceAssignment::query();
+
+        if ($user->role === UserRole::MARINE_EXT_TEAM_MEMBER->value) {
+            $query->where("inspector_id", $user->id);
+        }
+
         $mlceAssignments = $this->paginateOrGet(
-            MlceAssignment::with($this->getRelations())->filter()->latest());
+            $query->with($this->getRelations())->filter()->latest());
 
         return $this->respondWithResourceCollection(
             MlceAssignmentResource::collection($mlceAssignments)

@@ -23,7 +23,6 @@ class MlceIndent extends Model
         "vertical_rm_id",
         "under_writer_id",
 
-        'indent_code',
         'ref_no',
         'policy_no',
         'policy_type',
@@ -54,24 +53,22 @@ class MlceIndent extends Model
         'vertical_name',
         'insured_commodity',
         'industry',
-        'job_scope',
-        'why_mlce'
+        'job_scope'
     ];
 
     protected static function boot(): void {
         parent::boot();
 
-        // Before creating a mlce indent, set the indent_code
+        // Before creating a mlce ref, set the ref_no
         static::creating(function ($mlceIndent) {
-            $mlceIndent->indent_code = self::generateIndentCode();
+            $mlceIndent->ref_no = self::generateRefNo();
         });
     }
 
 
-    public static function generateIndentCode(): string {
+    public static function generateRefNo(): string {
         $count = self::whereYear('created_at', now()->year)->count() + 1;
-        return 'MLCE-INDENT-FY'.now()->format('y').'-'.now()->format("dmy").'-'
-            .str_pad($count, 6, '0', STR_PAD_LEFT);
+        return 'MLCE-INDENT-FY'.now()->format('y').'-'.now()->format("dmy").'-'.$count;
     }
 
     public function createdBy(): BelongsTo {

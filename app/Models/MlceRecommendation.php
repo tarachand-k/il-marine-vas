@@ -15,10 +15,9 @@ class MlceRecommendation extends Model
 
         'ref_no',
         'location',
-        'sub_location',
         'brief',
         'closure_priority',
-        'is_capital_required',
+        'capital_involvement',
         'current_observation',
         'hazard',
         'recommendations',
@@ -30,6 +29,21 @@ class MlceRecommendation extends Model
         "photo_3_desc",
         "photo_4_desc",
     ];
+
+    protected static function boot(): void {
+        parent::boot();
+
+        // Before creating a mlce ref, set the ref_no
+        static::creating(function (MlceRecommendation $mlceRecommendation) {
+            $mlceRecommendation->ref_no = self::generateRefNo($mlceRecommendation->mlce_assignment_id);
+        });
+    }
+
+
+    public static function generateRefNo(string $mlceAssignmentId): string {
+        $count = self::where('mlce_assignment_id', $mlceAssignmentId)->count() + 1;
+        return 'REC-'.$count;
+    }
 
     public function mlceAssignment(): BelongsTo {
         return $this->belongsTo(MlceAssignment::class);

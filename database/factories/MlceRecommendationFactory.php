@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\CapitalInvolvement;
 use App\Models\MlceAssignment;
 use App\Models\MlceRecommendation;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -13,12 +14,10 @@ class MlceRecommendationFactory extends Factory
 
     public function definition(): array {
         return [
-            'ref_no' => $this->faker->word(),
             'location' => $this->faker->word(),
-            'sub_location' => $this->faker->word(),
             'brief' => $this->faker->word(),
             // 'closure_priority' => $this->faker->word(),
-            'is_capital_required' => $this->faker->boolean(),
+            'capital_involvement' => $this->faker->randomElement(array_column(CapitalInvolvement::cases(), "value")),
             'current_observation' => $this->faker->paragraph(1),
             'hazard' => $this->faker->paragraph(1),
             'recommendations' => $this->faker->paragraph(1),

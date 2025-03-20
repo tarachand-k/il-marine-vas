@@ -24,7 +24,6 @@ return new class extends Migration {
             $table->foreignId("under_writer_id")->nullable()
                 ->constrained("users")->nullOnDelete();
 
-            $table->string('indent_code', 50);
             $table->string('ref_no', 50);
             $table->string('policy_no');
             $table->string('policy_type');
@@ -34,10 +33,10 @@ return new class extends Migration {
             $table->string('gwp',)->nullable();
             $table->string('nic',)->nullable();
             $table->string('nep',)->nullable();
-            $table->string('lr_percentage',)->nullable();
-            $table->string('vertical_name',)->nullable();
-            $table->string('insured_commodity',)->nullable();
-            $table->string('industry',)->nullable();
+            $table->string('lr_percentage')->nullable();
+            $table->string('vertical_name')->nullable();
+            $table->string('insured_commodity')->nullable();
+            $table->string('industry')->nullable();
             $table->string('pdr_observation', 100)->nullable();
             $table->longText('job_scope')->nullable();
 

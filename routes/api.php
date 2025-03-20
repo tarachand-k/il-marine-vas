@@ -80,8 +80,9 @@ Route::prefix("v1")->group(function () {
 
         Route::prefix("mlce-reports/{mlce_report}")->group(function () {
             Route::controller(MlceReportController::class)->group(function () {
-                Route::patch("approve", "approveReport");
-                Route::patch("publish", "publishReport");
+                Route::patch("submit", "submit");
+                Route::patch("approve", "approve");
+                Route::patch("publish", "publish");
             });
 
             Route::controller(ReportViewController::class)->group(function () {

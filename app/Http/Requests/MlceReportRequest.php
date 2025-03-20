@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\MlceReportStatus;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class MlceReportRequest extends FormRequest
 {
@@ -21,7 +19,6 @@ class MlceReportRequest extends FormRequest
             'observation_closure_summery' => ['nullable', 'array'],
             'status_of_comment' => ['nullable', 'array'],
             'mlce_outcome' => ['nullable', 'array'],
-            'status' => ['sometimes', Rule::enum(MlceReportStatus::class)],
         ];
 
         if ($this->routeIs("mlce-reports.update")) {

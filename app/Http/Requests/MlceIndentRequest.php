@@ -18,7 +18,6 @@ class MlceIndentRequest extends FormRequest
             'vertical_rm_id' => ['required', 'exists:users,id'],
             'under_writer_id' => ['required', 'exists:users,id'],
 
-            'ref_no' => ['required', 'string'],
             'policy_no' => ['required', 'string'],
             'policy_type' => ['required', 'string'],
             'policy_start_date' => ['required', 'date_format:Y-m-d'],
@@ -32,7 +31,7 @@ class MlceIndentRequest extends FormRequest
             'insured_commodity' => ['nullable', 'string'],
             'industry' => ['nullable', 'string'],
             'pdr_observation' => ['nullable', ...$this->validateFile("pdr_observation")],
-            'job_scope' => ['nullable', "string"],
+            'job_scope' => ['nullable', "string", 'json'],
 
             'allowed_users' => ["required", 'array'],
             "allowed_users.*" => ["required", 'exists:users,id'],
@@ -44,7 +43,7 @@ class MlceIndentRequest extends FormRequest
             'locations.*.location' => ['required', 'string'],
             'locations.*.address' => ['nullable'],
             'locations.*.spoc_name' => ['nullable'],
-            'locations.*.spoc_email' => ['nullable', 'email', 'max:254', Rule::unique("mlce_indent_locations")],
+            'locations.*.spoc_email' => ['nullable', 'email', 'max:254'],
             'locations.*.spoc_mobile_no' => ['nullable'],
             'locations.*.spoc_whatsapp_no' => ['nullable'],
             'locations.*.google_map_link' => ['nullable'],
@@ -60,7 +59,6 @@ class MlceIndentRequest extends FormRequest
             $rules["vertical_rm_id"][0] = "sometimes";
             $rules["under_writer_id"][0] = "sometimes";
 
-            $rules["ref_no"][0] = "sometimes";
             $rules["policy_no"][0] = "sometimes";
             $rules["policy_type"][0] = "sometimes";
             $rules["policy_start_date"][0] = "sometimes";

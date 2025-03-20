@@ -9,9 +9,7 @@ class AssignmentObservationRequest extends FormRequest
     public function rules(): array {
         $rules = [
             'mlce_assignment_id' => ['required', 'exists:mlce_assignments,id'],
-            'ref_no' => ['nullable', 'string'],
             'location' => ['required', 'string'],
-            'sub_location' => ['nullable', 'string'],
             'brief' => ['nullable', 'string'],
             'type' => ['required', 'string'],
             'current_observation' => ['required', 'string'],

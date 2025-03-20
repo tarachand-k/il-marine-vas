@@ -21,7 +21,6 @@ class MlceIndentResource extends JsonResource
             'vertical_rm_id' => $this->vertical_rm_id,
             'under_writer_id' => $this->under_writer_id,
 
-            'indent_code' => $this->indent_code,
             'ref_no' => $this->ref_no,
             'policy_no' => $this->policy_no,
             'policy_type' => $this->policy_type,

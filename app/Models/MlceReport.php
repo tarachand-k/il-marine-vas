@@ -39,6 +39,7 @@ class MlceReport extends Model
         'mlce_outcome',
         'status',
         'view_count',
+        'submitted_at',
         'approved_at',
         'published_at',
     ];
@@ -55,8 +56,7 @@ class MlceReport extends Model
 
     public static function generateReportCode(): string {
         $count = self::whereYear('created_at', now()->year)->count() + 1;
-        return 'MLCE-REPORT-FY'.now()->format('y').'-'.now()->format("dmy").'-'
-            .str_pad($count, 6, '0', STR_PAD_LEFT);
+        return 'MLCE-REPORT-FY'.now()->format('y').'-'.now()->format("dmy").'-'.$count;
     }
 
     public function mlceIndent(): BelongsTo {

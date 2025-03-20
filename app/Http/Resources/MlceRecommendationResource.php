@@ -17,10 +17,9 @@ class MlceRecommendationResource extends JsonResource
 
             'ref_no' => $this->ref_no,
             'location' => $this->location,
-            'sub_location' => $this->sub_location,
             'brief' => $this->brief,
             'closure_priority' => $this->closure_priority,
-            'is_capital_required' => $this->is_capital_required,
+            'capital_involvement' => $this->capital_involvement,
             'current_observation' => $this->current_observation,
             'hazard' => $this->hazard,
             'recommendations' => $this->recommendations,

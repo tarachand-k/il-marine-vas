@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\CapitalInvolvement;
 use App\Enums\MlceRecommendationClosurePriority;
 use App\Enums\MlceRecommendationStatus;
 use App\Enums\MlceRecommendationTimeline;
@@ -15,13 +16,13 @@ return new class extends Migration {
             $table->foreignId('mlce_assignment_id')->constrained("mlce_assignments")
                 ->cascadeOnDelete();
 
-            $table->string('ref_no')->nullable();
+            $table->string('ref_no');
             $table->string('location');
-            $table->string('sub_location')->nullable();
             $table->text('brief')->nullable();
             $table->enum('closure_priority', array_column(MlceRecommendationClosurePriority::cases(), "value"))
                 ->default(MlceRecommendationClosurePriority::LOW->value);
-            $table->boolean('is_capital_required')->default(false);
+            $table->enum('capital_involvement', array_column(CapitalInvolvement::cases(), "value"))
+                ->default(CapitalInvolvement::NO->value);
             $table->longText('current_observation');
             $table->longText('hazard')->nullable();
             $table->longText('recommendations');

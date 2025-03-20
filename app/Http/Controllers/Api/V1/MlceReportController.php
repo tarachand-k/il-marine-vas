@@ -36,18 +36,6 @@ class MlceReportController extends Controller
         );
     }
 
-    public function approveReport(MlceReport $mlceReport) {
-        if ($mlceReport->status !== MlceReportStatus::SUBMITTED->value) {
-            return $this->respondError("Report has already been approved!", null, 400);
-        }
-
-        $mlceReport->update([
-            "status" => MlceReportStatus::APPROVED->value,
-            "approved_at" => now()->format("Y-m-d H:i:s"),
-        ]);
-
-        return $this->respondSuccess("Report has been approved successfully!");
-    }
 
     /**
      * Update the specified mlceReport in storage.
@@ -59,19 +47,6 @@ class MlceReportController extends Controller
             new MlceReportResource($mlceReport),
             "MlceReport updated successfully!"
         );
-    }
-
-    public function publishReport(MlceReport $mlceReport) {
-        if ($mlceReport->status === MlceReportStatus::PUBLISHED->value) {
-            return $this->respondError("Report has already been published!", null, 400);
-        }
-
-        $mlceReport->update([
-            "status" => MlceReportStatus::PUBLISHED->value,
-            "published_at" => now()->format("Y-m-d H:i:s"),
-        ]);
-
-        return $this->respondSuccess("Report has been published successfully!");
     }
 
     /**
@@ -94,5 +69,44 @@ class MlceReportController extends Controller
         $mlceReport->delete();
 
         return $this->respondSuccess("MlceReport deleted successfully!");
+    }
+
+    public function submit(MlceReport $mlceReport) {
+        if ($mlceReport->status !== MlceReportStatus::PENDING->value) {
+            return $this->respondError("Report has already been submitted!", null, 400);
+        }
+
+        $mlceReport->update([
+            "status" => MlceReportStatus::SUBMITTED->value,
+            "submitted_at" => now()->format("Y-m-d H:i:s"),
+        ]);
+
+        return $this->respondSuccess("Report has been submitted successfully!");
+    }
+
+    public function approve(MlceReport $mlceReport) {
+        if ($mlceReport->status !== MlceReportStatus::SUBMITTED->value) {
+            return $this->respondError("Report has already been approved!", null, 400);
+        }
+
+        $mlceReport->update([
+            "status" => MlceReportStatus::APPROVED->value,
+            "approved_at" => now()->format("Y-m-d H:i:s"),
+        ]);
+
+        return $this->respondSuccess("Report has been approved successfully!");
+    }
+
+    public function publish(MlceReport $mlceReport) {
+        if ($mlceReport->status === MlceReportStatus::PUBLISHED->value) {
+            return $this->respondError("Report has already been published!", null, 400);
+        }
+
+        $mlceReport->update([
+            "status" => MlceReportStatus::PUBLISHED->value,
+            "published_at" => now()->format("Y-m-d H:i:s"),
+        ]);
+
+        return $this->respondSuccess("Report has been published successfully!");
     }
 }

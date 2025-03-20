@@ -25,8 +25,9 @@ return new class extends Migration {
             $table->longText('mlce_outcome')->nullable();
             $table->unsignedInteger('view_count')->default(0);
             $table->enum('status', array_column(MlceReportStatus::cases(), "value"))
-                ->default(MlceReportStatus::SUBMITTED->value);
+                ->default(MlceReportStatus::PENDING->value);
 
+            $table->dateTime('submitted_at')->nullable();
             $table->dateTime('approved_at')->nullable();
             $table->dateTime('published_at')->nullable();
 
