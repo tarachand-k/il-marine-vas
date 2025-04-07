@@ -17,7 +17,7 @@ class MlceReportRequest extends FormRequest
             'navigation_report_manual' => ['nullable', 'array'],
             'findings' => ['nullable', 'array'],
             'observation_closure_summery' => ['nullable', 'array'],
-            'status_of_comment' => ['nullable', 'array'],
+            'disclaimer' => ['nullable', 'array'],
             'mlce_outcome' => ['nullable', 'array'],
         ];
 

@@ -33,12 +33,14 @@ class MlceIndentController extends Controller
         $user = request()->user();
         $query = MlceIndent::query();
 
-        if ($user->role !== UserRole::ILGIC_MLCE_ADMIN->value) {
+        if ($user->role === UserRole::MARINE_EXT_TEAM_MEMBER->value) {
+            $query->orWhereHas("assignments", fn($query) => $query->where("inspector_id", $user->id));
+        } elseif ($user->role !== UserRole::ILGIC_MLCE_ADMIN->value) {
             $query->whereHas("allowedUsers", fn($query) => $query->where("users.id", $user->id));
         }
 
         $mlceIndents = $this->paginateOrGet(
-            $query->with($this->getRelations())->filter()->latest());
+            $query->with($this->getRelations())->filter()->latest("id"));
 
         return $this->respondWithResourceCollection(
             MlceIndentResource::collection($mlceIndents)

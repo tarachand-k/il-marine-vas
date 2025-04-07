@@ -10,6 +10,8 @@ use Illuminate\Http\JsonResponse;
 
 class CustomerController extends Controller
 {
+    protected array $relations = ["rm", "underWriter", "channelPartner"];
+    
     public function index(): JsonResponse {
         $customers = $this->paginateOrGet(Customer::latest());
 

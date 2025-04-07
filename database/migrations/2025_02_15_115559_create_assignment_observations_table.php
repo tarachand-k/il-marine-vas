@@ -13,7 +13,7 @@ return new class extends Migration {
                 ->cascadeOnDelete();
 
             $table->string('ref_no');
-            $table->string('location');
+            $table->string('sub_location');
             $table->string('brief')->nullable();
             $table->string('type');
             $table->longText('current_observation');

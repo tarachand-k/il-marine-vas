@@ -15,6 +15,8 @@ class MlceReport extends Model
     public $filterFields = [
         'mlce_indent_id',
         'customer_id',
+        'submitted_by_id',
+        'approved_by_id',
 
         'report_code',
         'status',
@@ -26,6 +28,8 @@ class MlceReport extends Model
     protected $fillable = [
         'mlce_indent_id',
         'customer_id',
+        'submitted_by_id',
+        'approved_by_id',
 
         'report_code',
         'acknowledgment',
@@ -35,7 +39,7 @@ class MlceReport extends Model
         'navigation_report_manual',
         'findings',
         'observation_closure_summery',
-        'status_of_comment',
+        'disclaimer',
         'mlce_outcome',
         'status',
         'view_count',
@@ -75,6 +79,14 @@ class MlceReport extends Model
         return $this->hasMany(ReportView::class, 'mlce_report_id');
     }
 
+    public function submittedBy(): BelongsTo {
+        return $this->belongsTo(User::class, "submitted_by_id");
+    }
+
+    public function approvedBy(): BelongsTo {
+        return $this->belongsTo(User::class, "approved_by_id");
+    }
+
     protected function casts(): array {
         return [
             'acknowledgment' => 'array',
@@ -84,7 +96,7 @@ class MlceReport extends Model
             'navigation_report_manual' => 'array',
             'findings' => 'array',
             'observation_closure_summery' => 'array',
-            'status_of_comment' => 'array',
+            'disclaimer' => 'array',
             'mlce_outcome' => 'array',
         ];
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\MlceIndentStatus;
 use App\Enums\MlceReportStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MlceReportRequest;
@@ -12,7 +13,7 @@ use Illuminate\Http\JsonResponse;
 class MlceReportController extends Controller
 {
     protected array $relations = [
-        "mlceIndent", "customer", "views"
+        "mlceIndent", "customer", "views", "approvedBy"
     ];
 
     public function index(): JsonResponse {
@@ -81,6 +82,8 @@ class MlceReportController extends Controller
             "submitted_at" => now()->format("Y-m-d H:i:s"),
         ]);
 
+        $mlceReport->mlceIndent()->update(["status" => MlceIndentStatus::IN_REVIEW->value]);
+
         return $this->respondSuccess("Report has been submitted successfully!");
     }
 
@@ -91,8 +94,11 @@ class MlceReportController extends Controller
 
         $mlceReport->update([
             "status" => MlceReportStatus::APPROVED->value,
+            "approved_by_id" => request()->user()->id,
             "approved_at" => now()->format("Y-m-d H:i:s"),
         ]);
+
+        $mlceReport->mlceIndent()->update(["status" => MlceIndentStatus::IN_CLIENT_REVIEW->value]);
 
         return $this->respondSuccess("Report has been approved successfully!");
     }

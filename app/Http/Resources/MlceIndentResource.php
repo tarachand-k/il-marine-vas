@@ -36,6 +36,8 @@ class MlceIndentResource extends JsonResource
             'industry' => $this->industry,
             'pdr_observation' => $this->pdr_observation,
             'job_scope' => $this->job_scope,
+            'status' => $this->status,
+            'completed_at' => $this->completed_at,
 
             // relations
             'created_by' => new UserResource($this->whenLoaded('createdBy')),

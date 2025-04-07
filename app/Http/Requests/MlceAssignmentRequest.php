@@ -16,6 +16,7 @@ class MlceAssignmentRequest extends FormRequest
             'supervisor_id' => ['nullable', 'exists:users,id'],
 
             'status' => ['sometimes', Rule::enum(MlceAssignmentStatus::class)],
+            'observation_description' => ['nullable', 'array'],
         ];
 
         if ($this->routeIs("mlce-assignments.update")) {

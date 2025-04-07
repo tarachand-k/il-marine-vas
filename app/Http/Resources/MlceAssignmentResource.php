@@ -19,8 +19,8 @@ class MlceAssignmentResource extends JsonResource
             'supervisor_id' => $this->supervisor_id,
 
             'status' => $this->status,
-            'location_status' => $this->location_status,
             'completed_at' => $this->completed_at,
+            'observation_description' => $this->observation_description,
 
             // relations
             'mlce_indent' => new MlceIndentResource($this->whenLoaded('mlceIndent')),

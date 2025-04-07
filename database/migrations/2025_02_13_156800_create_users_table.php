@@ -16,8 +16,7 @@ return new class extends Migration {
 
             $table->foreignId("created_by_id")->nullable()->constrained("users")
                 ->nullOnDelete();
-            $table->foreignId("customer_id")->nullable()->constrained("customers")
-                ->cascadeOnDelete();
+            $table->foreignId("customer_id")->nullable();
 
             $table->string('name');
             $table->string('email')->unique();
@@ -27,6 +26,7 @@ return new class extends Migration {
             $table->enum("role", array_column(UserRole::cases(), "value"));
             $table->enum("status", array_column(UserStatus::cases(), "value"))
                 ->default(UserStatus::ACTIVE->value);
+            $table->text("about")->nullable();
 
             $table->timestamp("last_login_at")->nullable();
 

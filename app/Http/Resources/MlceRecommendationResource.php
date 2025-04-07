@@ -13,10 +13,11 @@ class MlceRecommendationResource extends JsonResource
         return [
             'id' => $this->id,
 
+            'mlce_indent_id' => $this->mlce_indent_id,
             'mlce_assignment_id' => $this->mlce_assignment_id,
 
             'ref_no' => $this->ref_no,
-            'location' => $this->location,
+            'sub_location' => $this->sub_location,
             'brief' => $this->brief,
             'closure_priority' => $this->closure_priority,
             'capital_involvement' => $this->capital_involvement,
@@ -26,6 +27,9 @@ class MlceRecommendationResource extends JsonResource
             'client_response' => $this->client_response,
             'status' => $this->status,
             'timeline' => $this->timeline,
+            'completed_at' => $this->completed_at,
+            'is_implemented' => $this->is_implemented,
+            'comment' => $this->comment,
             'photo_1' => $this->photo_1,
             'photo_2' => $this->photo_2,
             'photo_3' => $this->photo_3,
@@ -36,6 +40,7 @@ class MlceRecommendationResource extends JsonResource
             'photo_4_desc' => $this->photo_4_desc,
 
             // relations
+            // 'mlce_indent' => new MlceIndentResource($this->whenLoaded("mlceIndent")),
             'mlce_assignment' => new MlceAssignmentResource($this->whenLoaded('mlceAssignment')),
 
             // timestamps

@@ -13,9 +13,10 @@ class MlceRecommendationRequest extends FormRequest
 {
     public function rules(): array {
         $rules = [
+            "mlce_indent_id" => ['required', 'exists:mlce_indents,id'],
             'mlce_assignment_id' => ['required', 'exists:mlce_assignments,id'],
 
-            'location' => ['required', 'string'],
+            'sub_location' => ['required', 'string'],
             'brief' => ['nullable', 'string'],
             'closure_priority' => ['required', Rule::enum(MlceRecommendationClosurePriority::class)],
             'capital_involvement' => ['required', Rule::enum(CapitalInvolvement::class)],
@@ -36,10 +37,11 @@ class MlceRecommendationRequest extends FormRequest
         ];
 
         if ($this->routeIs("mlce-recommendations.update")) {
+            $rules["mlce_indent_id"][0] = "sometimes";
             $rules["mlce_assignment_id"][0] = "sometimes";
 
             $rules["ref_no"][0] = "sometimes";
-            $rules["location"][0] = "sometimes";
+            $rules["sub_location"][0] = "sometimes";
             $rules["capital_involvement"][0] = "sometimes";
             $rules["closure_priority"][0] = "sometimes";
             $rules["current_observation"][0] = "sometimes";

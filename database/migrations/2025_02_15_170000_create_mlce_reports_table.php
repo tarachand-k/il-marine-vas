@@ -12,6 +12,7 @@ return new class extends Migration {
 
             $table->foreignId('mlce_indent_id')->constrained("mlce_indents")->cascadeOnDelete();
             $table->foreignId('customer_id')->constrained("customers")->cascadeOnDelete();
+            $table->foreignId("approved_by_id")->nullable()->constrained("users")->nullOnDelete();
 
             $table->string("report_code", 50);
             $table->longText('acknowledgment')->nullable();
@@ -21,7 +22,7 @@ return new class extends Migration {
             $table->longText('navigation_report_manual')->nullable();
             $table->longText('findings')->nullable();
             $table->longText('observation_closure_summery')->nullable();
-            $table->longText('status_of_comment')->nullable();
+            $table->longText('disclaimer')->nullable();
             $table->longText('mlce_outcome')->nullable();
             $table->unsignedInteger('view_count')->default(0);
             $table->enum('status', array_column(MlceReportStatus::cases(), "value"))

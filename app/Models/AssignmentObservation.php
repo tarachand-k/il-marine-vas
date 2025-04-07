@@ -14,7 +14,7 @@ class AssignmentObservation extends Model
         'mlce_assignment_id',
 
         'ref_no',
-        'location',
+        'sub_location',
         'brief',
         'type',
         'current_observation',
@@ -29,14 +29,16 @@ class AssignmentObservation extends Model
 
         // Before creating a mlce ref, set the ref_no
         static::creating(function (AssignmentObservation $assignmentObservation) {
-            $assignmentObservation->ref_no = self::generateRefNo($assignmentObservation->mlce_assignment_id);
+            $location = $assignmentObservation->mlceAssignment->mlceIndentLocation->location;
+            $assignmentObservation->ref_no = self::generateRefNo($location, $assignmentObservation->mlce_assignment_id);
         });
     }
 
 
-    public static function generateRefNo(string $mlceAssignmentId): string {
+    public static function generateRefNo(string $location, string $mlceAssignmentId): string {
+        $formattedLocation = str_replace(" ", "-", strtoupper($location));
         $count = self::where('mlce_assignment_id', $mlceAssignmentId)->count() + 1;
-        return 'OBS-'.$count;
+        return $formattedLocation.'-OBS-'.$count;
     }
 
     public function mlceAssignment(): BelongsTo {

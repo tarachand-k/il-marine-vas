@@ -19,7 +19,6 @@ class MlceAssignment extends Model
         'supervisor_id',
 
         'status',
-        'location_status',
         'completed_at',
     ];
 
@@ -30,8 +29,8 @@ class MlceAssignment extends Model
         'supervisor_id',
 
         'status',
-        'location_status',
         'completed_at',
+        'observation_description',
     ];
 
     public function mlceIndent(): BelongsTo {
@@ -64,5 +63,11 @@ class MlceAssignment extends Model
 
     public function assignmentPhotos(): HasMany {
         return $this->hasMany(AssignmentPhoto::class, 'mlce_assignment_id');
+    }
+
+    protected function casts(): array {
+        return [
+            'observation_description' => 'array'
+        ];
     }
 }

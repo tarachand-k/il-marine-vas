@@ -13,6 +13,10 @@ class CustomerResource extends JsonResource
         return [
             'id' => $this->id,
 
+            'rm_id' => $this->rm_id,
+            'under_writer_id' => $this->under_writer_id,
+            'channel_partner_id' => $this->channel_partner_id,
+
             'name' => $this->name,
             'email' => $this->email,
             'mobile_no' => $this->mobile_no,
@@ -20,10 +24,17 @@ class CustomerResource extends JsonResource
             'policy_type' => $this->policy_type,
             'policy_start_date' => $this->policy_start_date,
             'policy_end_date' => $this->policy_end_date,
+            'account_type' => $this->account_type,
+            'address' => $this->address,
             'about' => $this->about,
             'coverage_terms' => $this->coverage_terms,
             'cargo_details' => $this->cargo_details,
             'transit_details' => $this->transit_details,
+
+            // relations
+            'rm' => new UserResource($this->whenLoaded('rm')),
+            'under_writer' => new UserResource($this->whenLoaded('underWriter')),
+            'channel_partner' => new UserResource($this->whenLoaded('channelPartner')),
 
             // timestamps
             'created_at' => $this->created_at,

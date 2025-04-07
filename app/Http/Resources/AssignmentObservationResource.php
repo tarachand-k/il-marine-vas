@@ -16,7 +16,7 @@ class AssignmentObservationResource extends JsonResource
             'mlce_assignment_id' => $this->mlce_assignment_id,
 
             'ref_no' => $this->ref_no,
-            'location' => $this->location,
+            'sub_location' => $this->sub_location,
             'brief' => $this->brief,
             'type' => $this->type,
             'current_observation' => $this->current_observation,

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\MlceIndentStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -39,6 +40,9 @@ return new class extends Migration {
             $table->string('industry')->nullable();
             $table->string('pdr_observation', 100)->nullable();
             $table->longText('job_scope')->nullable();
+            $table->enum("status", array_column(MlceIndentStatus::cases(), "value"))
+                ->default(MlceIndentStatus::CREATED->value);
+            $table->dateTime("completed_at")->nullable();
 
             $table->timestamps();
         });

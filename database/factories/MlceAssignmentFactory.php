@@ -22,6 +22,7 @@ class MlceAssignmentFactory extends Factory
 
             'mlce_indent_id' => MlceIndent::factory(),
             'mlce_indent_location_id' => MlceIndentLocation::factory(),
+            'observation_description' => $this->faker->paragraphs(),
             'inspector_id' => User::factory(),
             'supervisor_id' => User::factory(),
         ];

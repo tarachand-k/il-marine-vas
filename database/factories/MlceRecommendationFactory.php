@@ -14,7 +14,7 @@ class MlceRecommendationFactory extends Factory
 
     public function definition(): array {
         return [
-            'location' => $this->faker->word(),
+            'sub_location' => $this->faker->streetName(),
             'brief' => $this->faker->word(),
             // 'closure_priority' => $this->faker->word(),
             'capital_involvement' => $this->faker->randomElement(array_column(CapitalInvolvement::cases(), "value")),

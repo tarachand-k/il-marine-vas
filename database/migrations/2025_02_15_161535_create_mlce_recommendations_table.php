@@ -13,11 +13,13 @@ return new class extends Migration {
         Schema::create('mlce_recommendations', function (Blueprint $table) {
             $table->id();
 
+            $table->foreignId("mlce_indent_id")->constrained("mlce_indents")
+                ->cascadeOnDelete();
             $table->foreignId('mlce_assignment_id')->constrained("mlce_assignments")
                 ->cascadeOnDelete();
 
             $table->string('ref_no');
-            $table->string('location');
+            $table->string('sub_location');
             $table->text('brief')->nullable();
             $table->enum('closure_priority', array_column(MlceRecommendationClosurePriority::cases(), "value"))
                 ->default(MlceRecommendationClosurePriority::LOW->value);
@@ -31,6 +33,9 @@ return new class extends Migration {
                 ->default(MlceRecommendationStatus::PENDING->value);
             $table->enum('timeline', array_column(MlceRecommendationTimeline::cases(), "value"))
                 ->default(MlceRecommendationTimeline::DAYS_7->value);
+            $table->dateTime("completed_at")->nullable();
+            $table->boolean("is_implemented")->nullable();
+            $table->text("comment")->nullable();
 
             $table->string("photo_1", 100)->nullable();
             $table->string("photo_2", 100)->nullable();

@@ -5,14 +5,17 @@ namespace Database\Seeders;
 use App\Enums\AssigneeLocationTrackStatus;
 use App\Enums\MlceAssignmentStatus;
 use App\Enums\MlceIndentLocationStatus;
+use App\Enums\MlceIndentStatus;
 use App\Enums\MlceRecommendationClosurePriority;
 use App\Enums\MlceRecommendationTimeline;
+use App\Enums\MlceReportStatus;
 use App\Enums\UserRole;
 use App\Models\AboutUs;
 use App\Models\Acknowledgment;
 use App\Models\AssigneeLocationTrack;
 use App\Models\AssignmentObservation;
 use App\Models\Customer;
+use App\Models\Disclaimer;
 use App\Models\MarineVas;
 use App\Models\Marketing;
 use App\Models\MlceAssignment;
@@ -60,6 +63,8 @@ class DatabaseSeeder extends Seeder
             "content" => "<h1>Why MLCE 1 - Hello world </h1>",
         ]);
 
+        Disclaimer::factory()->create();
+
         $mlceTypes = [
             [
                 "name" => "Value Addition",
@@ -99,17 +104,24 @@ class DatabaseSeeder extends Seeder
                 "created_by_id" => $admin->id,
                 "email" => implode("-", explode(" ", strtolower($role)))."@admin.com",
                 "role" => $role,
+                "about" => $role === UserRole::MARINE_EXT_TEAM_MEMBER->value ? fake()->paragraphs(asText: true) : null,
             ]);
         });
 
         $customer1 = Customer::factory()->create([
             "name" => "JSW Paints",
             "email" => "customer@jsw-paints.in",
+            "rm_id" => User::firstWhere("role", UserRole::RM->value)->id,
+            "under_writer_id" => User::firstWhere("role", UserRole::UW->value)->id,
+            "channel_partner_id" => User::firstWhere("role", UserRole::CHANNEL_PARTNER->value)->id,
         ]);
 
         $customer2 = Customer::factory()->create([
             "name" => "Xiaomi India",
             "email" => "customer@xiaomi.in",
+            "rm_id" => User::firstWhere("role", UserRole::RM->value)->id,
+            "under_writer_id" => User::firstWhere("role", UserRole::UW->value)->id,
+            "channel_partner_id" => User::firstWhere("role", UserRole::CHANNEL_PARTNER->value)->id,
         ]);
 
         Customer::all()->each(function ($customer) use ($admin, $insuredRoles) {
@@ -168,17 +180,18 @@ class DatabaseSeeder extends Seeder
                 ]);
 
                 AssignmentObservation::factory()->create([
-                    "ref_no" => AssignmentObservation::generateRefNo($mlceAssignment->id),
+                    "ref_no" => AssignmentObservation::generateRefNo($indentLocation->location, $mlceAssignment->id),
                     "mlce_assignment_id" => $mlceAssignment->id,
                 ]);
                 AssignmentObservation::factory()->create([
-                    "ref_no" => AssignmentObservation::generateRefNo($mlceAssignment->id),
+                    "ref_no" => AssignmentObservation::generateRefNo($indentLocation->location, $mlceAssignment->id),
                     "mlce_assignment_id" => $mlceAssignment->id,
                 ]);
 
                 MlceRecommendation::factory()->create([
-                    "ref_no" => AssignmentObservation::generateRefNo($mlceAssignment->id),
-                    "location" => "Loading Procedure",
+                    "mlce_indent_id" => $mlceIndent->id,
+                    "ref_no" => MlceRecommendation::generateRefNo($indentLocation->location, $mlceAssignment->id),
+                    "sub_location" => "Loading Procedure",
                     "closure_priority" => MlceRecommendationClosurePriority::HIGH->value,
                     "timeline" => MlceRecommendationTimeline::DAYS_7->value,
                     "mlce_assignment_id" => $mlceAssignment->id,
@@ -186,13 +199,13 @@ class DatabaseSeeder extends Seeder
                     "current_observation" => "We noted the loading and securing is done as per the SOP.",
                     "hazard" => "If not followed the damage could occur to the packing, absence of lashing, improper vehicle selection etc., could result in recurring damages",
                     "recommendations" => "Any abnormalities / damages observed on material, packing, stacking, lashing, vehicle condition, holes in tarpaulin / roof of the vehicle, protruding objects, water marks etc., should be photographed before unloading and the same should be informed to the supplier and the transporter.
-The stacking of the containers to be in line with the SOP.
-"
+                                            The stacking of the containers to be in line with the SOP."
                 ]);
 
                 MlceRecommendation::factory()->create([
-                    "ref_no" => AssignmentObservation::generateRefNo($mlceAssignment->id),
-                    "location" => "Transport / Carrier Vehicle",
+                    "mlce_indent_id" => $mlceIndent->id,
+                    "ref_no" => MlceRecommendation::generateRefNo($indentLocation->location, $mlceAssignment->id),
+                    "sub_location" => "Transport / Carrier Vehicle",
                     "timeline" => MlceRecommendationTimeline::DAYS_90->value,
                     "closure_priority" => MlceRecommendationClosurePriority::LOW->value,
                     "mlce_assignment_id" => $mlceAssignment->id,
@@ -200,9 +213,8 @@ The stacking of the containers to be in line with the SOP.
                     "current_observation" => "Sim Based Tracking application is implemented for tracking purpose.",
                     "hazard" => "Lack of transit visibility can lead to delivery delays. Over-speeding can damage the cargo’s external packaging, which may result in customer rejection.",
                     "recommendations" => "ILGIC shall create a TRIP creation dashboard to the client.
-The dispatch coordinator at Plant  will feed basic info, i.e consignment serial no, destination , transport name  (chosen from drop down) and driver’s details
-ILGICnd team or the CHA  will rig the portable GPS device in the cabin that shall be synchronous with the tracking system.  Client will have a LIVE 24x7 trackig of the trips/ and reversing of devices managed by ILGIC.
-",
+                                            The dispatch coordinator at Plant  will feed basic info, i.e consignment serial no, destination , transport name  (chosen from drop down) and driver’s details
+                                            ILGICnd team or the CHA  will rig the portable GPS device in the cabin that shall be synchronous with the tracking system.  Client will have a LIVE 24x7 trackig of the trips/ and reversing of devices managed by ILGIC.",
                 ]);
 
                 AssigneeLocationTrack::factory()->create([
@@ -211,8 +223,7 @@ ILGICnd team or the CHA  will rig the portable GPS device in the cabin that shal
                 ]);
 
                 $mlceAssignment->update([
-                    "location_status" => AssigneeLocationTrackStatus::CMCD->value,
-                    "status" => MlceAssignmentStatus::COMPLETED->value,
+                    "status" => MlceAssignmentStatus::SURVEY_COMPLETED->value,
                     "completed_at" => now()->format("Y-m-d H:i:s")
                 ]);
                 $indentLocation->update(["status" => MlceIndentLocationStatus::COMPLETED->value]);
@@ -221,8 +232,18 @@ ILGICnd team or the CHA  will rig the portable GPS device in the cabin that shal
                     "mlce_assignment_id" => $mlceAssignment->id,
                     'status' => AssigneeLocationTrackStatus::DMC->value,
                 ]);
-                $mlceAssignment->update(["location_status" => AssigneeLocationTrackStatus::DMC->value]);
+
+                $mlceAssignment->update(["status" => MlceAssignmentStatus::DEMOBILISED->value]);
+                $mlceAssignment->update(["status" => MlceAssignmentStatus::RECOMMENDATIONS_SUBMITTED->value]);
             }
+
+            $mlceReport->update([
+                "status" => MlceReportStatus::APPROVED->value,
+                "submitted_at" => now()->format("Y-m-d H:i:s"),
+                "approved_by_id" => $admin->id,
+                "approved_at" => now()->format("Y-m-d H:i:s"),
+            ]);
+            $mlceIndent->update(["status" => MlceIndentStatus::IN_CLIENT_REVIEW->value]);
 
             $mlceReport->views()->createMany([
                 [

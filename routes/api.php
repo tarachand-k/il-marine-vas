@@ -2,13 +2,13 @@
 
 use App\Http\Controllers\Api\V1\AboutUsController;
 use App\Http\Controllers\Api\V1\AcknowledgmentController;
-use App\Http\Controllers\Api\V1\AssigneeLocationTrackController;
 use App\Http\Controllers\Api\V1\AssignmentObservationController;
 use App\Http\Controllers\Api\V1\AssignmentPhotoController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CommandController;
 use App\Http\Controllers\Api\V1\CustomerController;
 use App\Http\Controllers\Api\V1\DashboardController;
+use App\Http\Controllers\Api\V1\DisclaimerController;
 use App\Http\Controllers\Api\V1\MarineVasController;
 use App\Http\Controllers\Api\V1\MarketingController;
 use App\Http\Controllers\Api\V1\MlceAssignmentController;
@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\V1\PresentationController;
 use App\Http\Controllers\Api\V1\PresentationViewController;
 use App\Http\Controllers\Api\V1\ReportViewController;
 use App\Http\Controllers\Api\V1\SopController;
+use App\Http\Controllers\Api\V1\SopViewController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\VideoController;
 use App\Http\Controllers\Api\V1\VideoViewController;
@@ -47,11 +48,11 @@ Route::prefix("v1")->group(function () {
             "marine-vas" => MarineVasController::class,
             "navigation-report-manuals" => NavigationReportManualController::class,
             "why-mlce" => WhyMlceController::class,
+            "disclaimers" => DisclaimerController::class,
             "customers" => CustomerController::class,
             "mlce-types" => MlceTypeController::class,
             "mlce-indents" => MlceIndentController::class,
             "mlce-assignments" => MlceAssignmentController::class,
-            "assignee-location-tracks" => AssigneeLocationTrackController::class,
             "assignment-observations" => AssignmentObservationController::class,
             "mlce-recommendations" => MlceRecommendationController::class,
             "assignment-photos" => AssignmentPhotoController::class,
@@ -71,11 +72,12 @@ Route::prefix("v1")->group(function () {
 
         Route::prefix("mlce-assignments/{mlce_assignment}")->group(function () {
             Route::controller(MlceAssignmentController::class)->group(function () {
-                Route::patch("complete", "completeAssignment");
-                Route::patch("cancel", "cancelAssignment");
+                Route::patch("mobilise", "mobilise");
+                Route::patch("start-survey", "startSurvey");
+                Route::patch("complete-survey", "completeSurvey");
+                Route::patch("demobilise", "demobilise");
+                Route::patch("submit-recommendations", "submitRecommendations");
             });
-
-            Route::post("assignee-location-tracks", [AssigneeLocationTrackController::class, "store"]);
         });
 
         Route::prefix("mlce-reports/{mlce_report}")->group(function () {
@@ -100,6 +102,13 @@ Route::prefix("v1")->group(function () {
             });
 
         Route::prefix("presentations/{presentation}/views")->controller(PresentationViewController::class)
+            ->group(function () {
+                Route::post("", "store");
+                Route::get("stats", "stats");
+                Route::get("users/{user_id}", "getViewsByUser");
+            });
+
+        Route::prefix("sops/{sop}/views")->controller(SopViewController::class)
             ->group(function () {
                 Route::post("", "store");
                 Route::get("stats", "stats");

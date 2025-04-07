@@ -18,6 +18,7 @@ class SopResource extends JsonResource
             'pdf' => $this->pdf,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
+            'view_count' => $this->view_count,
 
             'customer' => new CustomerResource($this->whenLoaded('customer')),
             'allowed_users' => UserResource::collection($this->whenLoaded("allowedUsers")),

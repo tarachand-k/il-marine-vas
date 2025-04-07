@@ -31,7 +31,7 @@ class MlceIndentRequest extends FormRequest
             'insured_commodity' => ['nullable', 'string'],
             'industry' => ['nullable', 'string'],
             'pdr_observation' => ['nullable', ...$this->validateFile("pdr_observation")],
-            'job_scope' => ['nullable', "string", 'json'],
+            'job_scope' => ['nullable', "array"],
 
             'allowed_users' => ["required", 'array'],
             "allowed_users.*" => ["required", 'exists:users,id'],

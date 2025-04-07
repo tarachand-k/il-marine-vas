@@ -19,6 +19,7 @@ class CustomerFactory extends Factory
             'policy_type' => $this->faker->word,
             'policy_start_date' => $this->faker->date(),
             'policy_end_date' => $this->faker->date(),
+            'address' => $this->faker->address,
             'about' => $this->faker->paragraph(),
             'coverage_terms' => $this->faker->paragraph(),
             'cargo_details' => $this->faker->paragraph(),

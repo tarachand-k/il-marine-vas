@@ -3,9 +3,9 @@
     <td class="header">
         <a href="{{ $url }}" style="display: inline-block;">
             {{--            @if (trim($slot) === 'Laravel')--}}
-            <img src="https://aihika.in/seven-islands/storage/app/public/logo.png" class="logo" alt="Laravel Logo">
+            <img src="https://marinevas.com/MarineVas/Logo/logo.png" class="logo" alt="">
             {{--            @else--}}
-            {{--                {{ $slot }}--}}
+            {{--                            {{ $slot }}--}}
             {{--            @endif--}}
         </a>
     </td>

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\AssigneeLocationTrackStatus;
 use App\Enums\MlceAssignmentStatus;
 use App\Enums\MlceIndentLocationStatus;
+use App\Enums\MlceIndentStatus;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AssigneeLocationTrackRequest;
 use App\Http\Requests\MlceAssignmentRequest;
 use App\Http\Resources\MlceAssignmentResource;
 use App\Models\MlceAssignment;
@@ -47,6 +50,10 @@ class MlceAssignmentController extends Controller
         $mlceAssignment->mlceIndentLocation()
             ->update(["status" => MlceIndentLocationStatus::PENDING->value]);
 
+        if ($mlceAssignment->mlceIndent->status === MlceIndentStatus::CREATED->value) {
+            $mlceAssignment->mlceIndent->update(["status" => MlceIndentStatus::IN_PROGRESS->value]);
+        }
+
         return $this->respondCreated(
             new MlceAssignmentResource($mlceAssignment),
             "MlceAssignment created successfully!"
@@ -74,33 +81,6 @@ class MlceAssignmentController extends Controller
         return $this->respondWithResource(new MlceAssignmentResource($mlceAssignment));
     }
 
-    public function completeAssignment(MlceAssignment $mlceAssignment) {
-        $mlceAssignment->update([
-            "status" => MlceAssignmentStatus::COMPLETED->value,
-            "completed_at" => now()->format("Y-m-d H:i:s"),
-        ]);
-
-        $mlceAssignment->mlceIndentLocation()
-            ->update(["status" => MlceIndentLocationStatus::COMPLETED->value]);
-
-        return $this->respondSuccess(
-            "Assignment completed successfully!"
-        );
-    }
-
-    public function cancelAssignment(MlceAssignment $mlceAssignment) {
-        $mlceAssignment->update([
-            "status" => MlceAssignmentStatus::CANCELLED->value,
-        ]);
-
-        $mlceAssignment->mlceIndentLocation()
-            ->update(["status" => MlceIndentLocationStatus::CANCELLED->value]);
-
-        return $this->respondSuccess(
-            "Assignment declined successfully!"
-        );
-    }
-
     /**
      * Remove the specified mlceAssignment from storage.
      */
@@ -108,5 +88,83 @@ class MlceAssignmentController extends Controller
         $mlceAssignment->delete();
 
         return $this->respondSuccess("MlceAssignment deleted successfully!");
+    }
+
+    public function mobilise(AssigneeLocationTrackRequest $request, MlceAssignment $mlceAssignment) {
+        if ($mlceAssignment->status !== MlceAssignmentStatus::ASSIGNED->value) {
+            return $this->respondError("Assignment has already been mobilised", statusCode: 400);
+        }
+
+        $mlceAssignment->update(["status" => MlceAssignmentStatus::MOBILISED->value]);
+
+        $mlceAssignment->assigneeLocationTracks()->create(
+            $request->validated() + ["status" => AssigneeLocationTrackStatus::CMMI->value]);
+
+        return $this->respondSuccess(
+            "Assignment has been mobilised successfully!"
+        );
+    }
+
+    public function startSurvey(AssigneeLocationTrackRequest $request, MlceAssignment $mlceAssignment) {
+        if ($mlceAssignment->status !== MlceAssignmentStatus::MOBILISED->value) {
+            return $this->respondError("Assignment survey has already been started or completed", statusCode: 400);
+        }
+
+        $mlceAssignment->update(["status" => MlceAssignmentStatus::SURVEY_STARTED->value]);
+
+        $mlceAssignment->assigneeLocationTracks()->create(
+            $request->validated() + ["status" => AssigneeLocationTrackStatus::ROS_2C_MLCE->value]);
+
+        return $this->respondSuccess(
+            "Assignment survey has been started"
+        );
+    }
+
+    public function completeSurvey(AssigneeLocationTrackRequest $request, MlceAssignment $mlceAssignment) {
+        if ($mlceAssignment->status !== MlceAssignmentStatus::SURVEY_STARTED->value) {
+            return $this->respondError("Assignment survey has already been completed", statusCode: 400);
+        }
+
+        $mlceAssignment->update([
+            "status" => MlceAssignmentStatus::SURVEY_COMPLETED->value,
+            "completed_at" => now()->format("Y-m-d H:i:s"),
+        ]);
+
+        $mlceAssignment->assigneeLocationTracks()->create(
+            $request->validated() + ["status" => AssigneeLocationTrackStatus::CMCD->value]);
+
+        $mlceAssignment->mlceIndentLocation()
+            ->update(["status" => MlceIndentLocationStatus::COMPLETED->value]);
+
+        return $this->respondSuccess(
+            "Assignment survey has been completed"
+        );
+    }
+
+    public function demobilise(AssigneeLocationTrackRequest $request, MlceAssignment $mlceAssignment) {
+        if ($mlceAssignment->status !== MlceAssignmentStatus::SURVEY_COMPLETED->value) {
+            return $this->respondError("Assignment has already been demobilised", statusCode: 400);
+        }
+
+        $mlceAssignment->update(["status" => MlceAssignmentStatus::DEMOBILISED->value,]);
+
+        $mlceAssignment->assigneeLocationTracks()->create(
+            $request->validated() + ["status" => AssigneeLocationTrackStatus::DMC->value]);
+
+        return $this->respondSuccess(
+            "Assignment has been demobilised"
+        );
+    }
+
+    public function submitRecommendations(MlceAssignment $mlceAssignment) {
+        if ($mlceAssignment->status !== MlceAssignmentStatus::DEMOBILISED->value) {
+            return $this->respondError("Assignment recommendations have already been submitted", statusCode: 400);
+        }
+
+        $mlceAssignment->update(["status" => MlceAssignmentStatus::RECOMMENDATIONS_SUBMITTED->value,]);
+
+        return $this->respondSuccess(
+            "Assignment recommendations have been submitted"
+        );
     }
 }

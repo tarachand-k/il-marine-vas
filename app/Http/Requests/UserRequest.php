@@ -25,6 +25,7 @@ class UserRequest extends FormRequest
             'mobile_no' => ['nullable', 'string', 'max:20'],
             'password' => ['required', 'string', "confirmed"],
             'role' => ['required', Rule::enum(UserRole::class)],
+            'about' => ['nullable', 'string'],
             'status' => ['required', Rule::enum(UserStatus::class)],
             'photo' => $this->validateFile("photo")
         ];

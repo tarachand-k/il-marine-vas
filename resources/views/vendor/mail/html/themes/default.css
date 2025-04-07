@@ -232,7 +232,7 @@ img {
 
 .button-blue,
 .button-primary {
-    --color-primary: hsl(165, 92%, 45%);
+    --color-primary: rgb(8, 59, 106);
     background-color: var(--color-primary);
     border-bottom: 8px solid var(--color-primary);
     border-left: 18px solid var(--color-primary);
@@ -242,11 +242,11 @@ img {
 
 .button-green,
 .button-success {
-    background-color: hsl(165, 92%, 45%);
-    border-bottom: 8px solid hsl(165, 92%, 45%);
-    border-left: 18px solid hsl(165, 92%, 45%);
-    border-right: 18px solid hsl(165, 92%, 45%);
-    border-top: 8px solid hsl(165, 92%, 45%);
+    background-color: rgb(8, 59, 106);
+    border-bottom: 8px solid rgb(8, 59, 106);
+    border-left: 18px solid rgb(8, 59, 106);
+    border-right: 18px solid rgb(8, 59, 106);
+    border-top: 8px solid rgb(8, 59, 106);
 }
 
 .button-red,

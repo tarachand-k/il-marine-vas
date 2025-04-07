@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\MlceRecommendationStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MlceRecommendationRequest;
 use App\Http\Resources\MlceRecommendationResource;
@@ -65,6 +66,27 @@ class MlceRecommendationController extends Controller
             new MlceRecommendationResource($mlceRecommendation),
             "MlceRecommendation updated successfully!"
         );
+    }
+
+    public function complete(MlceRecommendation $mlceRecommendation) {
+        $data = request()->validate([
+            "is_implemented" => ["required", 'boolean'],
+            "comment" => ["nullable", "string"],
+        ]);
+
+        if ($mlceRecommendation->status === MlceRecommendationStatus::COMPLETED->value) {
+            return $this->respondError("Recommendation has already been completed!", statusCode: 400);
+        }
+
+        $mlceRecommendation->update([
+            "status" => MlceRecommendationStatus::COMPLETED->value,
+            "completed_at" => now()->format("Y-m-d H:i:s"),
+            "is_implemented" => $data["is_implemented"],
+            "comment" => $data["comment"],
+        ]);
+        $mlceRecommendation->mlceIndent->checkAndUpdateCompletedStatus();
+
+        return $this->respondSuccess("Recommendation has been completed successfully!");
     }
 
     /**

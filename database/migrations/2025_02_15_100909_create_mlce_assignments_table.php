@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\AssigneeLocationTrackStatus;
 use App\Enums\MlceAssignmentStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -21,10 +20,10 @@ return new class extends Migration {
                 ->nullOnDelete();
 
             $table->enum('status', array_column(MlceAssignmentStatus::cases(), "value"))
-                ->default(MlceAssignmentStatus::PENDING->value);
-            $table->enum("location_status", array_column(AssigneeLocationTrackStatus::cases(), "value"))
-                ->nullable();
+                ->default(MlceAssignmentStatus::ASSIGNED->value);
             $table->dateTime('completed_at')->nullable();
+
+            $table->mediumText("observation_description")->nullable();
 
             $table->timestamps();
         });

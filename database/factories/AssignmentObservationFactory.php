@@ -13,7 +13,7 @@ class AssignmentObservationFactory extends Factory
 
     public function definition(): array {
         return [
-            'location' => $this->faker->streetName(),
+            'sub_location' => $this->faker->streetName(),
             'brief' => $this->faker->word(),
             'type' => $this->faker->word(),
             'current_observation' => $this->faker->paragraph(1),

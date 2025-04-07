@@ -6,9 +6,11 @@ use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VideoRequest;
 use App\Http\Resources\VideoResource;
+use App\Mail\VideoMail;
 use App\Models\Video;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class VideoController extends Controller
 {
@@ -56,6 +58,8 @@ class VideoController extends Controller
             $video->allowedUsers()->attach($request->validated("allowed_users"));
         }
 
+        $video->allowedUsers->each(fn($user) => Mail::to($user->email)->send(new VideoMail($video, $user)));
+
         return $this->respondCreated(
             new VideoResource($video),
             "Video created successfully!"
@@ -80,7 +84,22 @@ class VideoController extends Controller
         $video->save();
 
         if ($request->has("allowed_users")) {
-            $video->allowedUsers()->sync($request->validated("allowed_users"));
+            // get the current allowed users' IDs before sync
+            $existingUserIds = $video->allowedUsers->pluck('id')->toArray();
+
+            // get the new allowed users from request
+            $newUserIds = $request->validated("allowed_users");
+
+            // find newly added user IDs by comparing new IDs with existing ones
+            $newlyAddedUserIds = array_diff($newUserIds, $existingUserIds);
+
+            // sync all allowed users
+            $video->allowedUsers()->sync($newUserIds);
+
+            // get the newly added users and send them emails
+            $video->allowedUsers()
+                ->whereIn('id', $newlyAddedUserIds)
+                ->each(fn($user) => Mail::to($user->email)->send(new VideoMail($video, $user)));
         }
 
         return $this->respondUpdated(

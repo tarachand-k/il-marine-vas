@@ -9,7 +9,7 @@ class AssignmentObservationRequest extends FormRequest
     public function rules(): array {
         $rules = [
             'mlce_assignment_id' => ['required', 'exists:mlce_assignments,id'],
-            'location' => ['required', 'string'],
+            'sub_location' => ['required', 'string'],
             'brief' => ['nullable', 'string'],
             'type' => ['required', 'string'],
             'current_observation' => ['required', 'string'],
@@ -25,7 +25,7 @@ class AssignmentObservationRequest extends FormRequest
 
         if ($this->routeIs("mlce-assignments.observations.update")) {
             $rules["mlce_assignment_id"][0] = "sometimes";
-            $rules["location"][0] = "sometimes";
+            $rules["sub_location"][0] = "sometimes";
             $rules["type"][0] = "sometimes";
         }
 

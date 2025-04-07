@@ -22,7 +22,7 @@ class MlceReportFactory extends Factory
             'navigation_report_manual' => $this->faker->paragraphs(),
             'findings' => $this->faker->paragraphs(),
             'observation_closure_summery' => $this->faker->paragraphs(),
-            'status_of_comment' => $this->faker->paragraphs(),
+            'disclaimer' => $this->faker->paragraphs(),
             'mlce_outcome' => $this->faker->paragraphs(),
             // 'status' => $this->faker->word(),
             // 'view_count' => $this->faker->numberBetween(1, 100),

@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('pdf', 100);
             $table->date('start_date');
             $table->date('end_date');
+            $table->unsignedInteger('view_count')->default(0);
 
             $table->timestamps();
         });

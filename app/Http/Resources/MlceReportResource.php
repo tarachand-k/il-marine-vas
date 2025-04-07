@@ -15,6 +15,8 @@ class MlceReportResource extends JsonResource
 
             'mlce_indent_id' => $this->mlce_indent_id,
             'customer_id' => $this->customer_id,
+            'submitted_by_id' => $this->submitted_by_id,
+            'approved_by_id' => $this->approved_by_id,
 
             'report_code' => $this->report_code,
             'acknowledgment' => $this->acknowledgment,
@@ -24,7 +26,7 @@ class MlceReportResource extends JsonResource
             'navigation_report_manual' => $this->navigation_report_manual,
             'findings' => $this->findings,
             'observation_closure_summery' => $this->observation_closure_summery,
-            'status_of_comment' => $this->status_of_comment,
+            'disclaimer' => $this->disclaimer,
             'mlce_outcome' => $this->mlce_outcome,
             'status' => $this->status,
             'view_count' => $this->view_count,
@@ -35,6 +37,8 @@ class MlceReportResource extends JsonResource
             // relations
             'mlce_indent' => new MlceIndentResource($this->whenLoaded('mlceIndent')),
             'customer' => new CustomerResource($this->whenLoaded('customer')),
+            "submitted_by" => new UserResource($this->whenLoaded("submittedBy")),
+            "approved_by" => new UserResource($this->whenLoaded("approvedBy")),
             "views" => ReportViewResource::collection($this->whenLoaded("views")),
 
             // timestamps

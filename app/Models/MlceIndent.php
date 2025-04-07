@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Abbasudo\Purity\Traits\Filterable;
+use App\Enums\MlceIndentStatus;
+use App\Enums\MlceRecommendationStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,6 +15,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class MlceIndent extends Model
 {
     use HasFactory, Filterable;
+
+    protected $attributes = [
+        "status" => MlceIndentStatus::CREATED->value,
+    ];
 
     public $filterFields = [
         'created_by_id',
@@ -28,6 +34,7 @@ class MlceIndent extends Model
         'policy_type',
         'policy_start_date',
         'policy_end_date',
+        'status',
     ];
 
     protected $fillable = [
@@ -45,6 +52,7 @@ class MlceIndent extends Model
         'policy_type',
         'policy_start_date',
         'policy_end_date',
+        'status',
         'hub',
         'gwp',
         'nic',
@@ -114,6 +122,23 @@ class MlceIndent extends Model
 
     public function locations(): HasMany {
         return $this->hasMany(MlceIndentLocation::class, 'mlce_indent_id');
+    }
+
+    public function recommendations(): HasMany {
+        return $this->hasMany(MlceRecommendation::class, "mlce_indent_id");
+    }
+
+    public function checkAndUpdateCompletedStatus(): void {
+        $pendingRecommendations = $this->recommendations()
+            ->where("status", MlceRecommendationStatus::PENDING->value)->count();
+
+        if ($pendingRecommendations > 0) {
+            return;
+        }
+
+        $this->status = MlceIndentStatus::COMPLETED->value;
+        $this->completed_at = now()->format("Y-m-d H:i:s");
+        $this->save();
     }
 
     protected function casts(): array {
