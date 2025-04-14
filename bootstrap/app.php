@@ -3,6 +3,7 @@
 use App\Http\Middleware\EnforceJsonResponse;
 use App\Services\ExceptionApiResponse;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
@@ -13,8 +14,6 @@ use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
-//use Illuminate\Console\Scheduling\Schedule;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -71,5 +70,10 @@ return Application::configure(basePath: dirname(__DIR__))
             fn(QueryException $exception) => $apiResponse->respondQueryException($exception)
         );
     })
-//    ->withSchedule(function (Schedule $scheduler) {})
+    ->withSchedule(function (Schedule $scheduler) {
+        $scheduler->command('marketing:send-emails')
+            ->weekly()
+            ->mondays()
+            ->at('09:00');
+    })
     ->create();

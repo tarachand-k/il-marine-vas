@@ -94,6 +94,9 @@ Route::prefix("v1")->group(function () {
             });
         });
 
+        Route::patch("mlce-recommendations/{mlce_recommendation}/complete",
+            [MlceRecommendationController::class, "complete"]);
+
         Route::prefix("videos/{video}/views")->controller(VideoViewController::class)
             ->group(function () {
                 Route::post("", "store");

@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('policy_no');
             $table->date('policy_start_date');
             $table->date('policy_end_date');
+            $table->string('email');
             $table->string('account');
             $table->string('account_type');
             $table->string('industry');

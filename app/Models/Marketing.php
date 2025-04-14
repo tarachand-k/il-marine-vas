@@ -16,6 +16,7 @@ class Marketing extends Model
         'policy_no',
         'policy_start_date',
         'policy_end_date',
+        'email',
         'account',
         'account_type',
         'industry',
