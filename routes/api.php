@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\CommandController;
 use App\Http\Controllers\Api\V1\CustomerController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\DisclaimerController;
+use App\Http\Controllers\Api\V1\ExecutiveSummaryController;
 use App\Http\Controllers\Api\V1\MarineVasController;
 use App\Http\Controllers\Api\V1\MarketingController;
 use App\Http\Controllers\Api\V1\MlceAssignmentController;
@@ -64,6 +65,7 @@ Route::prefix("v1")->group(function () {
             "sops" => SopController::class,
             "marketings" => MarketingController::class,
             "mlce-schedules" => MlceScheduleController::class,
+            "executive-summaries" => ExecutiveSummaryController::class,
         ], [
             // ⛔ do not delete or update this, else the updating will not work.
             'parameters' => [
