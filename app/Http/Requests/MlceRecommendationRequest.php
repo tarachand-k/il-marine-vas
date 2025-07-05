@@ -11,7 +11,8 @@ use Illuminate\Validation\Rule;
 
 class MlceRecommendationRequest extends FormRequest
 {
-    public function rules(): array {
+    public function rules(): array
+    {
         $rules = [
             "mlce_indent_id" => ['required', 'exists:mlce_indents,id'],
             'mlce_assignment_id' => ['required', 'exists:mlce_assignments,id'],
@@ -52,13 +53,15 @@ class MlceRecommendationRequest extends FormRequest
         return $rules;
     }
 
-    protected function validateFile($file): array {
+    protected function validateFile($file): array
+    {
         return $this->hasFile($file)
-            ? ["nullable", "file", "max:2048"]
+            ? ["nullable", "file", "max:10240"]
             : ["nullable", "string", "max:100"];
     }
 
-    public function authorize(): bool {
+    public function authorize(): bool
+    {
         return true;
     }
 }

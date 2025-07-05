@@ -8,7 +8,8 @@ use Illuminate\Validation\Rule;
 
 class MlceIndentRequest extends FormRequest
 {
-    public function rules(): array {
+    public function rules(): array
+    {
         $rules = [
             'created_by_id' => ['required', 'exists:users,id'],
             'customer_id' => ['required', 'exists:customers,id'],
@@ -75,13 +76,15 @@ class MlceIndentRequest extends FormRequest
         return $rules;
     }
 
-    public function validateFile(string $fileName): array {
+    public function validateFile(string $fileName): array
+    {
         return $this->hasFile($fileName)
-            ? ["file", "max:2048"]
+            ? ["file", "max:10240"]
             : ["string", "max:100"];
     }
 
-    public function authorize(): bool {
+    public function authorize(): bool
+    {
         return true;
     }
 }

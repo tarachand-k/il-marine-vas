@@ -6,7 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class AssignmentObservationRequest extends FormRequest
 {
-    public function rules(): array {
+    public function rules(): array
+    {
         $rules = [
             'mlce_assignment_id' => ['required', 'exists:mlce_assignments,id'],
             'sub_location' => ['required', 'string'],
@@ -32,13 +33,15 @@ class AssignmentObservationRequest extends FormRequest
         return $rules;
     }
 
-    protected function validateFile($file): array {
+    protected function validateFile($file): array
+    {
         return $this->hasFile($file)
-            ? ["nullable", "file", "max:2048"]
+            ? ["nullable", "file", "max:10240"]
             : ["nullable", "string", "max:100"];
     }
 
-    public function authorize(): bool {
+    public function authorize(): bool
+    {
         return true;
     }
 }

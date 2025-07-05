@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\V1\MlceAssignmentController;
 use App\Http\Controllers\Api\V1\MlceIndentController;
 use App\Http\Controllers\Api\V1\MlceRecommendationController;
 use App\Http\Controllers\Api\V1\MlceReportController;
+use App\Http\Controllers\Api\V1\MlceScheduleController;
 use App\Http\Controllers\Api\V1\MlceTypeController;
 use App\Http\Controllers\Api\V1\NavigationReportManualController;
 use App\Http\Controllers\Api\V1\PresentationController;
@@ -62,6 +63,7 @@ Route::prefix("v1")->group(function () {
             "presentations" => PresentationController::class,
             "sops" => SopController::class,
             "marketings" => MarketingController::class,
+            "mlce-schedules" => MlceScheduleController::class,
         ], [
             // ⛔ do not delete or update this, else the updating will not work.
             'parameters' => [
@@ -84,7 +86,6 @@ Route::prefix("v1")->group(function () {
             Route::controller(MlceReportController::class)->group(function () {
                 Route::patch("submit", "submit");
                 Route::patch("approve", "approve");
-                Route::patch("publish", "publish");
             });
 
             Route::controller(ReportViewController::class)->group(function () {

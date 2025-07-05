@@ -11,7 +11,9 @@ use Illuminate\Http\JsonResponse;
 class MarketingController extends Controller
 {
     public function index(): JsonResponse {
-        $marketings = Marketing::all();
+        $marketings = $this->paginateOrGet(
+            Marketing::latest("id")
+        );
 
         return $this->respondWithResourceCollection(
             MarketingResource::collection($marketings)

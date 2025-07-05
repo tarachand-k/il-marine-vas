@@ -51,15 +51,15 @@ class UserRequest extends FormRequest
     }
 
     /**
-     * Override the validated method to exclude the password on update requests.
+     * Override the validated method to handle the password field correctly on update requests.
      * @param  null  $key
      * @param  null  $default
      */
     public function validated($key = null, $default = null) {
         $validatedData = parent::validated();
 
-        // If it's an update request, exclude the password field if it's present
-        if ($this->routeIs("users.update")) {
+        // If it's an update request and password is not provided or empty, exclude it
+        if ($this->routeIs("users.update") && (!$this->has('password') || empty($this->input('password')))) {
             unset($validatedData['password']);
         }
 

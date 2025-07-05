@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Enums\MlceRecommendationStatus;
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MlceRecommendationRequest;
 use App\Http\Resources\MlceRecommendationResource;
@@ -12,7 +13,7 @@ use Illuminate\Http\JsonResponse;
 class MlceRecommendationController extends Controller
 {
     protected array $relations = [
-        "mlceAssignment"
+        "mlceAssignment", "mlceIndent.customer"
     ];
 
     protected array $fileFieldNames = [
@@ -25,8 +26,17 @@ class MlceRecommendationController extends Controller
 
     protected ?string $resourceName = "mlce-recommendations";
 
-    public function index(): JsonResponse {
-        $mlceRecommendations = $this->paginateOrGet(MlceRecommendation::latest());
+    public function index(): JsonResponse
+    {
+        $query = MlceRecommendation::query();
+
+        $user = request()->user();
+
+        if ($user->role == UserRole::INSURED_ADMIN->value || $user->role == UserRole::INSURED_REPRESENTATIVE->value) {
+            $query->whereHas("mlceIndent", fn($q) => $q->where("customer_id", $user->customer_id));
+        }
+
+        $mlceRecommendations = $this->paginateOrGet($query->latest());
 
         return $this->respondWithResourceCollection(
             MlceRecommendationResource::collection($mlceRecommendations)
@@ -36,7 +46,8 @@ class MlceRecommendationController extends Controller
     /**
      * Store a newly created mlceRecommendation in storage.
      */
-    public function store(MlceRecommendationRequest $request): JsonResponse {
+    public function store(MlceRecommendationRequest $request): JsonResponse
+    {
         $mlceRecommendation = new MlceRecommendation($request->validated());
         $this->storeFiles($request, $mlceRecommendation);
         $mlceRecommendation->save();
@@ -50,14 +61,16 @@ class MlceRecommendationController extends Controller
     /**
      * Display the specified mlceRecommendation.
      */
-    public function show(MlceRecommendation $mlceRecommendation): JsonResponse {
+    public function show(MlceRecommendation $mlceRecommendation): JsonResponse
+    {
         return $this->respondWithResource(new MlceRecommendationResource($mlceRecommendation));
     }
 
     /**
      * Update the specified mlceRecommendation in storage.
      */
-    public function update(MlceRecommendationRequest $request, MlceRecommendation $mlceRecommendation): JsonResponse {
+    public function update(MlceRecommendationRequest $request, MlceRecommendation $mlceRecommendation): JsonResponse
+    {
         $mlceRecommendation->fill($request->validated());
         $this->updateFiles($request, $mlceRecommendation);
         $mlceRecommendation->save();
@@ -68,7 +81,8 @@ class MlceRecommendationController extends Controller
         );
     }
 
-    public function complete(MlceRecommendation $mlceRecommendation) {
+    public function complete(MlceRecommendation $mlceRecommendation)
+    {
         $data = request()->validate([
             "is_implemented" => ["required", 'boolean'],
             "comment" => ["nullable", "string"],
@@ -92,7 +106,8 @@ class MlceRecommendationController extends Controller
     /**
      * Remove the specified mlceRecommendation from storage.
      */
-    public function destroy(MlceRecommendation $mlceRecommendation): JsonResponse {
+    public function destroy(MlceRecommendation $mlceRecommendation): JsonResponse
+    {
         $this->deleteFiles($mlceRecommendation);
         $mlceRecommendation->delete();
 
