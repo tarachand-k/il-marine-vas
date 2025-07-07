@@ -41,6 +41,7 @@ class MlceReport extends Model
         'observation_closure_summery',
         'disclaimer',
         'mlce_outcome',
+        'executive_summary',
         'status',
         'view_count',
         'submitted_at',
@@ -48,7 +49,8 @@ class MlceReport extends Model
         'published_at',
     ];
 
-    protected static function boot(): void {
+    protected static function boot(): void
+    {
         parent::boot();
 
         // Before creating a mlce report, set the report_code
@@ -58,36 +60,44 @@ class MlceReport extends Model
     }
 
 
-    public static function generateReportCode(): string {
+    public static function generateReportCode(): string
+    {
         $count = self::whereYear('created_at', now()->year)->count() + 1;
-        return 'MLCE-REPORT-FY'.now()->format('y').'-'.now()->format("dmy").'-'.$count;
+        return 'MLCE-REPORT-FY' . now()->format('y') . '-' . now()->format("dmy") . '-' . $count;
     }
 
-    public function mlceIndent(): BelongsTo {
+    public function mlceIndent(): BelongsTo
+    {
         return $this->belongsTo(MlceIndent::class);
     }
 
-    public function mlceAssignment(): BelongsTo {
+    public function mlceAssignment(): BelongsTo
+    {
         return $this->belongsTo(MlceAssignment::class);
     }
 
-    public function customer(): BelongsTo {
+    public function customer(): BelongsTo
+    {
         return $this->belongsTo(Customer::class);
     }
 
-    public function views(): HasMany {
+    public function views(): HasMany
+    {
         return $this->hasMany(ReportView::class, 'mlce_report_id');
     }
 
-    public function submittedBy(): BelongsTo {
+    public function submittedBy(): BelongsTo
+    {
         return $this->belongsTo(User::class, "submitted_by_id");
     }
 
-    public function approvedBy(): BelongsTo {
+    public function approvedBy(): BelongsTo
+    {
         return $this->belongsTo(User::class, "approved_by_id");
     }
 
-    protected function casts(): array {
+    protected function casts(): array
+    {
         return [
             'acknowledgment' => 'array',
             'about_us' => 'array',
@@ -98,6 +108,7 @@ class MlceReport extends Model
             'observation_closure_summery' => 'array',
             'disclaimer' => 'array',
             'mlce_outcome' => 'array',
+            'executive_summary' => 'array',
         ];
     }
 }

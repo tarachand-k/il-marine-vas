@@ -9,7 +9,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /** @mixin MlceReport */
 class MlceReportResource extends JsonResource
 {
-    public function toArray(Request $request): array {
+    public function toArray(Request $request): array
+    {
         return [
             'id' => $this->id,
 
@@ -28,6 +29,7 @@ class MlceReportResource extends JsonResource
             'observation_closure_summery' => $this->observation_closure_summery,
             'disclaimer' => $this->disclaimer,
             'mlce_outcome' => $this->mlce_outcome,
+            'executive_summary' => $this->executive_summary,
             'status' => $this->status,
             'view_count' => $this->view_count,
             'submitted_at' => $this->submitted_at,

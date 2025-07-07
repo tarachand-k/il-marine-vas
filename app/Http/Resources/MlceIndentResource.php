@@ -9,7 +9,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /** @mixin MlceIndent */
 class MlceIndentResource extends JsonResource
 {
-    public function toArray(Request $request): array {
+    public function toArray(Request $request): array
+    {
         return [
             'id' => $this->id,
 
@@ -50,6 +51,7 @@ class MlceIndentResource extends JsonResource
             'allowed_users' => UserResource::collection($this->whenLoaded("allowedUsers")),
             "locations" => MlceIndentLocationResource::collection($this->whenLoaded("locations")),
             "assignments" => MlceAssignmentResource::collection($this->whenLoaded("assignments")),
+            "executive_summary_photos" => ExecutiveSummaryPhotoResource::collection($this->whenLoaded("executiveSummaryPhotos")),
             "report" => new MlceReportResource($this->whenLoaded("report")),
 
             // timestamps

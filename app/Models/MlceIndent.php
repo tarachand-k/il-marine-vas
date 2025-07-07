@@ -64,7 +64,8 @@ class MlceIndent extends Model
         'job_scope'
     ];
 
-    protected static function boot(): void {
+    protected static function boot(): void
+    {
         parent::boot();
 
         // Before creating a mlce ref, set the ref_no
@@ -74,61 +75,80 @@ class MlceIndent extends Model
     }
 
 
-    public static function generateRefNo(): string {
+    public static function generateRefNo(): string
+    {
         $count = self::whereYear('created_at', now()->year)->count() + 1;
-        return 'MLCE-INDENT-FY'.now()->format('y').'-'.now()->format("dmy").'-'.$count;
+        return 'MLCE-INDENT-FY' . now()->format('y') . '-' . now()->format("dmy") . '-' . $count;
     }
 
-    public function createdBy(): BelongsTo {
+    public function createdBy(): BelongsTo
+    {
         return $this->belongsTo(User::class, 'created_by_id');
     }
 
-    public function customer(): BelongsTo {
+    public function customer(): BelongsTo
+    {
         return $this->belongsTo(Customer::class);
     }
 
-    public function mlceType(): BelongsTo {
+    public function mlceType(): BelongsTo
+    {
         return $this->belongsTo(MlceType::class);
     }
 
-    public function insuredRepresentative(): BelongsTo {
+    public function insuredRepresentative(): BelongsTo
+    {
         return $this->belongsTo(User::class, "insured_representative_id");
     }
 
-    public function rm(): BelongsTo {
+    public function rm(): BelongsTo
+    {
         return $this->belongsTo(User::class, "rm_id");
     }
 
-    public function verticalRm(): BelongsTo {
+    public function verticalRm(): BelongsTo
+    {
         return $this->belongsTo(User::class, "vertical_rm_id");
     }
 
-    public function underWriter(): BelongsTo {
+    public function underWriter(): BelongsTo
+    {
         return $this->belongsTo(User::class, "under_writer_id");
     }
 
-    public function allowedUsers(): BelongsToMany {
+    public function allowedUsers(): BelongsToMany
+    {
         return $this->belongsToMany(User::class, 'mlce_indent_user');
     }
 
-    public function assignments(): HasMany {
+    public function assignments(): HasMany
+    {
         return $this->hasMany(MlceAssignment::class, 'mlce_indent_id')
             ->with(["assignmentObservations", "assigneeLocationTracks", "mlceRecommendations"]);
     }
 
-    public function report(): HasOne {
+    public function report(): HasOne
+    {
         return $this->hasOne(MlceReport::class, 'mlce_indent_id');
     }
 
-    public function locations(): HasMany {
+    public function locations(): HasMany
+    {
         return $this->hasMany(MlceIndentLocation::class, 'mlce_indent_id');
     }
 
-    public function recommendations(): HasMany {
+    public function recommendations(): HasMany
+    {
         return $this->hasMany(MlceRecommendation::class, "mlce_indent_id");
     }
 
-    public function checkAndUpdateCompletedStatus(): void {
+    public function executiveSummaryPhotos(): HasMany
+    {
+        return $this->hasMany(ExecutiveSummaryPhoto::class, 'mlce_indent_id');
+    }
+
+    public function checkAndUpdateCompletedStatus(): void
+    {
         $pendingRecommendations = $this->recommendations()
             ->where("status", MlceRecommendationStatus::PENDING->value)->count();
 
@@ -141,7 +161,8 @@ class MlceIndent extends Model
         $this->save();
     }
 
-    protected function casts(): array {
+    protected function casts(): array
+    {
         return [
             'job_scope' => 'array',
         ];

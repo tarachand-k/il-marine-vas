@@ -13,7 +13,7 @@ class MlceIndentController extends Controller
 {
     protected array $relations = [
         "createdBy", "customer", "mlceType", "insuredRepresentative", "rm", "verticalRm",
-        "underWriter", "allowedUsers", "locations", "assignments", "report",
+        "underWriter", "allowedUsers", "locations", "assignments", "executiveSummaryPhotos", "report",
     ];
 
     protected ?string $resourceName = "mlce-indents";
@@ -29,7 +29,8 @@ class MlceIndentController extends Controller
     /**
      * Display a listing of the mlceIndents.
      */
-    public function index(): JsonResponse {
+    public function index(): JsonResponse
+    {
         $user = request()->user();
         $query = MlceIndent::query();
 
@@ -50,7 +51,8 @@ class MlceIndentController extends Controller
     /**
      * Store a newly created mlceIndent in storage.
      */
-    public function store(MlceIndentRequest $request): JsonResponse {
+    public function store(MlceIndentRequest $request): JsonResponse
+    {
         $mlceIndent = $this->transactional(function () use ($request) {
             $mlceIndent = new MlceIndent($request->validated());
             $this->storeFiles($request, $mlceIndent);
@@ -84,7 +86,8 @@ class MlceIndentController extends Controller
     /**
      * Display the specified mlceIndent.
      */
-    public function show(MlceIndent $mlceIndent): JsonResponse {
+    public function show(MlceIndent $mlceIndent): JsonResponse
+    {
         $mlceIndent->load($this->getRelations());
 
         return $this->respondWithResource(new MlceIndentResource($mlceIndent));
@@ -93,7 +96,8 @@ class MlceIndentController extends Controller
     /**
      * Update the specified mlceIndent in storage.
      */
-    public function update(MlceIndentRequest $request, MlceIndent $mlceIndent): JsonResponse {
+    public function update(MlceIndentRequest $request, MlceIndent $mlceIndent): JsonResponse
+    {
         $mlceIndent = $this->transactional(function () use ($mlceIndent, $request) {
             $mlceIndent->fill($request->validated());
             $this->updateFiles($request, $mlceIndent);
@@ -136,7 +140,8 @@ class MlceIndentController extends Controller
     /**
      * Remove the specified mlceIndent from storage.
      */
-    public function destroy(MlceIndent $mlceIndent): JsonResponse {
+    public function destroy(MlceIndent $mlceIndent): JsonResponse
+    {
         $this->deleteFiles($mlceIndent);
         $mlceIndent->delete();
 

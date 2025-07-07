@@ -6,7 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class MlceReportRequest extends FormRequest
 {
-    public function rules(): array {
+    public function rules(): array
+    {
         $rules = [
             'mlce_indent_id' => ['required', 'exists:mlce_indents,id'],
             'customer_id' => ['required', 'exists:customers,id'],
@@ -19,6 +20,7 @@ class MlceReportRequest extends FormRequest
             'observation_closure_summery' => ['nullable', 'array'],
             'disclaimer' => ['nullable', 'array'],
             'mlce_outcome' => ['nullable', 'array'],
+            'executive_summary' => ['nullable', 'array'],
         ];
 
         if ($this->routeIs("mlce-reports.update")) {
@@ -29,7 +31,8 @@ class MlceReportRequest extends FormRequest
         return $rules;
     }
 
-    public function authorize(): bool {
+    public function authorize(): bool
+    {
         return true;
     }
 }
