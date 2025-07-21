@@ -25,6 +25,7 @@ class CustomerResource extends JsonResource
             'policy_start_date' => $this->policy_start_date,
             'policy_end_date' => $this->policy_end_date,
             'account_type' => $this->account_type,
+            'business_team_mo_name' => $this->business_team_mo_name,
             'address' => $this->address,
             'about' => $this->about,
             'coverage_terms' => $this->coverage_terms,

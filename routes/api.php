@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\V1\ReportViewController;
 use App\Http\Controllers\Api\V1\SopController;
 use App\Http\Controllers\Api\V1\SopViewController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\VesselAssessmentController;
 use App\Http\Controllers\Api\V1\VideoController;
 use App\Http\Controllers\Api\V1\VideoViewController;
 use App\Http\Controllers\Api\V1\WhyMlceController;
@@ -68,6 +69,7 @@ Route::prefix("v1")->group(function () {
             "mlce-schedules" => MlceScheduleController::class,
             "executive-summaries" => ExecutiveSummaryController::class,
             "mlce-indents.executive-summary-photos" => ExecutiveSummaryPhotoController::class,
+            "vessel-assessments" => VesselAssessmentController::class,
         ], [
             // ⛔ do not delete or update this, else the updating will not work.
             'parameters' => [
@@ -122,6 +124,17 @@ Route::prefix("v1")->group(function () {
                 Route::get("stats", "stats");
                 Route::get("users/{user_id}", "getViewsByUser");
             });
+
+        // Vessel Assessment specific routes
+        Route::prefix("vessel-assessments/{vessel_assessment}")->group(function () {
+            Route::controller(VesselAssessmentController::class)->group(function () {
+                Route::patch("assign", "assign");
+                Route::patch("complete", "complete");
+                Route::patch("approve", "approve");
+                Route::patch("update-parameters", "updateParameters");
+                Route::patch("submit", "submit");
+            });
+        });
 
         Route::get("dashboard", DashboardController::class);
     });

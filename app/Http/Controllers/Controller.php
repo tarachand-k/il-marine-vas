@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\CanManageFile;
 use App\Http\Traits\Response\HasApiResponse;
+use App\Http\Traits\Response\HasExceptionResponse;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -16,11 +17,12 @@ use Illuminate\Support\Str;
 
 abstract class Controller
 {
-    use CanManageFile, HasApiResponse;
+    use CanManageFile, HasApiResponse, HasExceptionResponse;
 
     protected array $relations = [];
 
-    protected function paginateOrGet(Builder|Model|BelongsToMany|HasMany $query) {
+    protected function paginateOrGet(Builder|Model|BelongsToMany|HasMany $query)
+    {
         $page = request()->query('page');
         $perPage = request()->query('perPage', 15); // Default perPage to 15 if not provided
 
@@ -31,7 +33,8 @@ abstract class Controller
         );
     }
 
-    protected function getRelations(): array {
+    protected function getRelations(): array
+    {
         // Get the 'relations' query parameter from the request
         $relationsToLoad = request()->query('relations');
 
@@ -52,7 +55,8 @@ abstract class Controller
         );
     }
 
-    protected function transactional(callable $callback): Model|JsonResponse|null {
+    protected function transactional(callable $callback): Model|JsonResponse|null
+    {
         DB::beginTransaction();
         try {
             // Execute the callback
@@ -67,7 +71,7 @@ abstract class Controller
             Log::error($e->getMessage());
 
             return $this->respondError(
-                "Action failed: ".$e->getMessage(),
+                "Action failed: " . $e->getMessage(),
                 $e
             );
         }

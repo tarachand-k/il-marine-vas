@@ -11,7 +11,8 @@ class MarketingFactory extends Factory
 {
     protected $model = Marketing::class;
 
-    public function definition(): array {
+    public function definition(): array
+    {
         return [
             'ref_no' => $this->faker->uuid(),
             'vas_type' => $this->faker->word(),
@@ -51,6 +52,7 @@ class MarketingFactory extends Factory
             'should_send_mail' => $this->faker->boolean(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
+            'email' => $this->faker->unique()->safeEmail(),
         ];
     }
 }

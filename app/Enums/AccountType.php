@@ -7,4 +7,5 @@ enum AccountType: string
     case CORPORATE = 'Corporate';
     case RETAIL = 'Retail';
     case UW = 'U/W';
+    case VESSEL_ASSESSMENT = 'Vessel Assessment';
 }

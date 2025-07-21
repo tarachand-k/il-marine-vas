@@ -25,6 +25,7 @@ class Customer extends Model
         'policy_start_date',
         'policy_end_date',
         "account_type",
+        "business_team_mo_name",
     ];
 
     protected $fillable = [
@@ -40,6 +41,7 @@ class Customer extends Model
         'policy_start_date',
         'policy_end_date',
         "account_type",
+        "business_team_mo_name",
         "address",
         "about",
         "coverage_terms",
@@ -47,19 +49,23 @@ class Customer extends Model
         "transit_details",
     ];
 
-    public function users(): HasMany {
+    public function users(): HasMany
+    {
         return $this->hasMany(User::class, 'customer_id');
     }
 
-    public function rm(): BelongsTo {
+    public function rm(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function underWriter(): BelongsTo {
+    public function underWriter(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function channelPartner(): BelongsTo {
+    public function channelPartner(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 }
